@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📋 백청남고 학생 행동 관찰 평가서</title>
+    <style>
+        @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css");
+
+        :root {
+            --bg-color: #e9ecef;
+            --paper-bg: #f8fafd;
+            --text-main: #373d47;
+            --text-sub: #6d727a;
+            --border-light: rgba(55, 61, 71, 0.15);
+            --border-dark: #373d47;
+            --accent-color: #2c3e50;
+            --highlight: #7e9cb3;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            margin: 0;
+            font-family: 'Pretendard Variable', Pretendard, system-ui, sans-serif;
+        }
+
+        .report-container {
+            width: 100%;
+            max-width: 850px;
+            background: var(--paper-bg);
+            color: var(--text-main);
+            line-height: 1.7;
+            border-radius: 4px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-top: 12px solid var(--accent-color);
+            padding: 50px 60px;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        /* 상단 문서 헤더 (Document Header) */
+        .doc-header {
+            text-align: center;
+            border-bottom: 2px solid var(--border-dark);
+            padding-bottom: 24px;
+            margin-bottom: 32px;
+        }
+
+        .doc-id {
+            font-size: 12px;
+            letter-spacing: 5px;
+            color: #8e9299;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            font-weight: 700;
+            font-family: monospace;
+        }
+
+        .doc-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+            margin: 0;
+        }
+
+        /* 기본 정보 메타 테이블 (위아래 배치로 수정) */
+        .meta-box {
+            background: #fff;
+            border: 1px solid var(--border-light);
+            padding: 20px 24px;
+            margin-bottom: 40px;
+            border-radius: 4px;
+        }
+
+        .meta-row {
+            margin-bottom: 16px;
+            font-size: 14.5px;
+        }
+
+        .meta-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .meta-label {
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 4px;
+            /* 라벨과 값 사이의 간격 */
+            display: block;
+        }
+
+        .meta-value {
+            color: var(--text-sub);
+            display: block;
+        }
+
+        /* 대상자 섹션 (Subject Section) */
+        .subject-section {
+            margin-bottom: 40px;
+        }
+
+        .subject-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 10px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* 평가 지수 (위아래 배치로 수정) */
+        .stat-group {
+            margin-bottom: 24px;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 16px;
+            border-radius: 6px;
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .stat-header {
+            margin-bottom: 12px;
+        }
+
+        .stat-name {
+            display: block;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .stat-score {
+            display: block;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: monospace;
+            color: var(--accent-color);
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--accent-color);
+            border-radius: 3px;
+        }
+
+        .progress-bar-fill.high {
+            background: var(--highlight);
+        }
+
+        .stat-desc {
+            font-size: 14px;
+            color: var(--text-sub);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* 종합 평가 결론 (Conclusion Box) */
+        .conclusion-box {
+            background: var(--text-main);
+            color: #f8fafd;
+            padding: 32px 36px;
+            border-radius: 8px;
+            margin-top: 50px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .conclusion-title {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: #fff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 12px;
+        }
+
+        .conclusion-text {
+            font-size: 14.5px;
+            color: #d1d5db;
+            margin-bottom: 16px;
+        }
+
+        .conclusion-text strong {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .final-verdict {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.3);
+            font-size: 16px;
+            font-weight: 800;
+            color: #b3d2e9;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 768px) {
+            .report-container {
+                padding: 40px 24px;
+            }
+
+            .conclusion-box {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="report-container">
+
+        <!-- Header -->
+        <div class="doc-header">
+            <div class="doc-id">PROJECT: ORBITAL DECAY (성가심 지수)</div>
+            <h1 class="doc-title">📋 백청남고 학생 행동 관찰 평가서</h1>
+        </div>
+
+        <!-- Meta Info -->
+        <div class="meta-box">
+            <div class="meta-row">
+                <div class="meta-label">관찰 대상</div>
+                <div class="meta-value">1학년 3반 성요한 / 성준언</div>
+            </div>
+            <div class="meta-row">
+                <div class="meta-label">관찰 기간</div>
+                <div class="meta-value">2026/04/11 ~ 04/12</div>
+            </div>
+            <div class="meta-row">
+                <div class="meta-label">관찰 장소</div>
+                <div class="meta-value">비상계단, 1학년 3반 교실</div>
+            </div>
+            <div class="meta-row" style="margin-top: 20px; padding-top: 16px; border-top: 1px dashed var(--border-light);">
+                <div class="meta-label">평가자 소견</div>
+                <div class="meta-value"><strong>이 두 명은 서로가 없으면 각자 훨씬 평온한 인생을 살았을 것이다. 확실하다.</strong></div>
+            </div>
+        </div>
+
+        <!-- Subject 1: 성요한 -->
+        <div class="subject-section">
+            <div class="subject-title">🔬 관찰 대상 A : 성요한 (1학년 이과 3등)</div>
+
+            <div class="stat-group">
+                <div class="stat-header">
+                    <span class="stat-name">성가신 남자 지수</span>
+                    <span class="stat-score">84 / 100</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill high" style="width: 84%;"></div>
+                </div>
+                <p class="stat-desc">울고 있는 사람 앞에서 "이게 무슨 감정인지 같이 알아보자"고 제안하는 인간이다. 비상계단에서 자기 감정을 나열하며 상담을 요청한 대상이, 정작 그 감정의 원인 당사자였다는 점에서 이미 재난급이다. 결정타는 다음 날 아침 초콜릿 사건. "너한테만 주는 거야", "내가 제일 좋아하는 거야"라고 속삭인 뒤 아무렇지 않게 창밖을 보며 허밍하는 행위는, 인간 심장에 대한 계획적 테러다. 본인은 당 보충이라고 주장한다.</p>
+            </div>
+
+            <div class="stat-group">
+                <div class="stat-header">
+                    <span class="stat-name">관심종자 지수</span>
+                    <span class="stat-score">41 / 100</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width: 41%;"></div>
+                </div>
+                <p class="stat-desc">낮은 편이다. 요한은 타인 전체의 관심을 원하지 않는다. 딱 한 명의 반응만 원한다. 문제는 그 한 명에게는 지분 100%를 요구한다는 점. 등을 톡톡 두드려 억지로 돌아보게 만드는 행위가 대표적이다. 광범위 관종은 아니되, 표적형 관종이다.</p>
+            </div>
+
+            <div class="stat-group">
+                <div class="stat-header">
+                    <span class="stat-name">눈치 없음 지수</span>
+                    <span class="stat-score">93 / 100</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill high" style="width: 93%;"></div>
+                </div>
+                <p class="stat-desc">평가서 최고점. "원하면 말해"라는 문장이 상대에게 얼마나 잔인한 요구인지 끝까지 인지하지 못했다. 준언이 "그렇게 말하면 아무도 안 말해"라고 항의했을 때조차, 눈을 동그랗게 뜨고 "왜?"라고 되물었다. 사회적 맥락을 데이터로만 처리하는 인간의 전형이다. 다만 본인이 서투름을 자각하고 노력한다는 점에서 7점을 감면했다.</p>
+            </div>
+
+            <div class="stat-group">
+                <div class="stat-header">
+                    <span class="stat-name">인내심 지수</span>
+                    <span class="stat-score">69 / 100</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width: 69%;"></div>
+                </div>
+                <p class="stat-desc">답이 나오지 않는 문제 앞에서 바닥에 드러누워버린 전적이 있다. 그러나 그 후 도망치지 않고 다시 붙었으며, 24시간 만에 초콜릿이라는 새로운 실험 조건을 설계해 왔다. 불확실성을 견디는 능력은 낮으나, 목표를 포기하는 능력은 더 낮다.</p>
+            </div>
+        </div>
+
+        <!-- Subject 2: 성준언 -->
+        <div class="subject-section">
+            <div class="subject-title">🔬 관찰 대상 B : 성준언 (1학년 이과 2등)</div>
+
+            <div class="stat-group">
+                <div class="stat-header">
+                    <span class="stat-name">성가신 남자 지수</span>
+                    <span class="stat-score">91 / 100</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill high" style="width: 91%;"></div>
+                </div>
+                <p class="stat-desc">"별거 아닌데. 기뻐할 일 아닌데"라고 말하면서 무릎에 얼굴을 파묻고 귀까지 새빨개진 인간이다. 초콜릿을 낚아채 손에 꽉 쥐고, 은박지를 조용히 벗겨 먹은 뒤 "맛있어"라고 혼잣말처럼 흘리고, 다음 순간 "달라고 말하는 건 못 하겠으니 그냥 줘"라고 요구했다. 그리고 결정적으로 — "안 원하는 날은 없을 거야." 이 문장 하나로 91점이 확정됐다. 본인은 정당한 항의였다고 믿고 있다.</p>
+            </div>
+
+            <div class="stat-group">
+                <div class="stat-header">
+                    <span class="stat-name">관심종자 지수</span>
+                    <span class="stat-score">58 / 100</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width: 58%;"></div>
+                </div>
+                <p class="stat-desc">표면적으로는 무관심을 연기한다. 그러나 실제 행동은 정반대다. 요한이 교실에 들어서자 어깨가 굳었고, 먼저 "왔어?"라고 물었으며, 그것이 인사가 아니라 존재 확인이었다는 점에서 의존도가 드러난다. 초콜릿 은박지를 버리지 않고 주머니에 넣은 행위는 물증이다.</p>
+            </div>
+
+            <div class="stat-group">
+                <div class="stat-header">
+                    <span class="stat-name">눈치 없음 지수</span>
+                    <span class="stat-score">47 / 100</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width: 47%;"></div>
+                </div>
+                <p class="stat-desc">타인의 감정을 읽는 능력은 나쁘지 않다. 문제는 자기 감정을 읽는 능력이 처참하다는 점이다. 심장이 터질 것 같다는 신호를 17년째 '병'이나 '불쾌감'으로 오분류하고 있으며, 여전히 '좋아한다'는 단어에 접근하지 못했다.</p>
+            </div>
+
+            <div class="stat-group">
+                <div class="stat-header">
+                    <span class="stat-name">인내심 지수</span>
+                    <span class="stat-score">77 / 100</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width: 77%;"></div>
+                </div>
+                <p class="stat-desc">불안정한 어머니의 기대를 짊어지고 이과 2등을 유지해온 지속력은 인정할 만하다. 다만 그 인내는 무감정을 유지할 때만 작동하는 종류이며, 요한이라는 변수 앞에서는 3분도 버티지 못한다.</p>
+            </div>
+        </div>
+
+        <!-- Conclusion -->
+        <div class="conclusion-box">
+            <div class="conclusion-title">📊 종합 평가 (Comprehensive Evaluation)</div>
+            <p class="conclusion-text">두 사람은 동일 종족의 다른 변종이다.</p>
+            <p class="conclusion-text">요한은 세상을 실험실로 인식하고, 준언은 세상을 시험장으로 인식했다. 둘 다 감정을 변수 취급하며 살아왔고, 둘 다 그 계산에서 자기 자신을 제외해 왔다. 차이는 방향뿐이다. 요한은 답을 찾으려 파고들고, 준언은 답이 없기를 바라며 도망친다.</p>
+            <p class="conclusion-text">관계의 구조는 명확하다. <strong>요한이 두드리고, 준언이 흔들린다.</strong> 이 구도는 24시간 동안 단 한 번도 역전되지 않았다. 비상계단에서 감정을 쏟아낸 쪽도 요한이고, 무너진 쪽도 준언이다. 교실에서 등을 두드린 쪽도 요한이고, 귀가 붉어진 쪽도 준언이다.</p>
+            <p class="conclusion-text">그러나 흥미로운 지점은, <strong>준언이 처음으로 능동적으로 손을 뻗었다는 것이다.</strong> "같이 하자"는 제안, "그냥 줘"라는 요구, "안 원하는 날은 없을 거야"라는 고백. 17년치 자존심을 삼키며 뱉은 문장들이다. 요한이 만든 균열 속으로 준언 본인이 걸어 들어왔다.</p>
+            <p class="conclusion-text">현재 두 사람은 자신들이 만든 계약서에 뭐라고 적혀 있는지 모르는 상태다. '모르는 척 하지 않기'라는 조항 하나만 명시되어 있고, 나머지는 백지다. 그 백지를 채우는 방식은 아마도 초콜릿 하나, 등을 두드리는 손가락 하나, "맛있어"라는 세 글자 같은 것들이 될 것이다.</p>
+            <p class="conclusion-text">결론: 둘 다 답을 모른다. 그런데 둘 다 답을 찾을 생각이다. 그리고 그 과정에서 아마 서로를 여러 번 무너뜨릴 것이다.</p>
+            <p class="conclusion-text">한 가지는 확실하다. 이 관계에서 먼저 '좋아한다'는 단어를 입에 올리는 쪽은 — 요한일 것이다. 준언은 죽을 때까지 못 한다.</p>
+
+            <div class="final-verdict">
+                최종 판정: 위험하고, 되돌릴 수 없으며, 이미 늦었다.
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
