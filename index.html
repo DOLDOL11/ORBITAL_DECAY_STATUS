@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>성준언 상태창 (Pro Maker)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap" rel="stylesheet">
+    <!-- 이미지 캡처를 위한 외부 라이브러리 불러오기 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --navy: #0a2540;
+            --ink: #1a365d;
+            --h: #1e5a85;
+            --soft: #5c7c9c;
+            --bg: #ffffff;
+            --card: #f4f9fd;
+            --line: #cbe4f7;
+            --sky: #d9eefa;
+            --sky2: #e5f3fc;
+            --pale: #edf6fc;
+            --blue: #6baef2;
+            --pink: #ffeaf0;
+            --pinkt: #d64973;
+            --point-bg: #e2f1fa;
+            box-sizing: border-box;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px 20px;
+            background-color: #f0f4f8;
+            font-family: "Apple SD Gothic Neo", sans-serif;
+        }
+
+        .layout-container {
+            display: flex;
+            gap: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .left-controls {
+            flex: 0 0 320px;
+            position: sticky;
+            top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .control-box {
+            background: #fff;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            border: 1px solid #e1e8ed;
+        }
+
+        .control-box h3 {
+            margin: 0 0 12px;
+            font-size: 15px;
+            color: #1a252f;
+            border-bottom: 2px solid #edf2f7;
+            padding-bottom: 8px;
+        }
+
+        /* === 저장 버튼 디자인 === */
+        .save-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .save-btns button {
+            background: var(--blue);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .save-btns button:hover {
+            background: #5a9ce2;
+            transform: translateY(-1px);
+        }
+
+        .save-btns button.html-btn {
+            background: #475569;
+        }
+
+        .save-btns button.html-btn:hover {
+            background: #334155;
+        }
+
+        .save-btns button.export-btn {
+            background: #10b981;
+        }
+
+        .save-btns button.export-btn:hover {
+            background: #059669;
+        }
+
+        .format-btns {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .format-btns button {
+            background: #f8f9fa;
+            border: 1px solid #d1d9e0;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+            color: #333;
+        }
+
+        .format-btns button:hover {
+            background: #e2e8f0;
+        }
+
+        .checkboxes {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .checkboxes label {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13.5px;
+            color: #444;
+        }
+
+        details.guide-box {
+            background: #fff;
+            border: 1px solid #e1e8ed;
+            border-radius: 12px;
+            padding: 14px 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+            font-size: 13px;
+            line-height: 1.6;
+            color: #475569;
+            transition: all 0.3s;
+        }
+
+        details.guide-box summary {
+            font-size: 14px;
+            font-weight: bold;
+            color: #1a252f;
+            cursor: pointer;
+            list-style: none;
+            outline: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        details.guide-box summary::-webkit-details-marker {
+            display: none;
+        }
+
+        details.guide-box summary::after {
+            content: "▼";
+            font-size: 11px;
+            color: #94a3b8;
+            transition: transform 0.2s;
+        }
+
+        details.guide-box[open] summary::after {
+            transform: rotate(180deg);
+        }
+
+        details.guide-box ul {
+            margin: 12px 0 0;
+            padding-left: 20px;
+        }
+
+        details.guide-box li {
+            margin-bottom: 6px;
+        }
+
+        .right-preview {
+            flex: 0 0 380px;
+            background: var(--bg);
+            /* 위(16px), 좌우(12px), 아래(16px) 여백을 동일하게 맞춤 */
+            padding: 16px 12px 16px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            font: 12px/1.4 "Gowun Dodum", sans-serif;
+            color: var(--ink);
+        }
+
+        @media (max-width: 768px) {
+            .layout-container {
+                flex-direction: column-reverse;
+                align-items: center;
+            }
+
+            .left-controls {
+                width: 100%;
+                max-width: 380px;
+                position: static;
+            }
+
+            .right-preview {
+                width: 100%;
+                max-width: 380px;
+            }
+        }
+
+        /* 텍스트 편집 및 드래그 디자인 */
+        .draggable {
+            cursor: grab;
+        }
+
+        .draggable:active {
+            cursor: grabbing;
+        }
+
+        .dragging {
+            opacity: 0.5;
+            border: 2px dashed var(--blue) !important;
+        }
+
+        [contenteditable="true"] {
+            outline: none;
+            transition: background 0.2s;
+            cursor: text;
+        }
+
+        [contenteditable="true"]:focus {
+            outline: 1px dashed var(--blue);
+            background: rgba(107, 174, 242, 0.08);
+            border-radius: 4px;
+        }
+
+        /* === 헤더 테마 === */
+        header {
+            position: relative;
+            overflow: hidden;
+            border-radius: 14px;
+            padding: 10px 12px 8px;
+            border: 1.5px solid var(--line);
+            margin-bottom: 6px;
+            transition: background 0.5s ease;
+        }
+
+        header * {
+            position: relative;
+            z-index: 2;
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            width: 50px;
+            height: 14px;
+            right: 10px;
+            top: 12px;
+            background: #fff;
+            border-radius: 20px;
+            opacity: .85;
+            box-shadow: -12px 6px 0 -3px #fff, 10px 5px 0 -4px #fff;
+            pointer-events: none;
+            z-index: 1;
+            transition: opacity 0.5s;
+        }
+
+        header::after {
+            content: "";
+            position: absolute;
+            pointer-events: none;
+            z-index: 0;
+            transition: all 0.5s ease;
+        }
+
+        header.theme-day {
+            background: linear-gradient(160deg, #bce0fa 0%, #dcf0fd 65%, #f0f8ff 100%);
+        }
+
+        header.theme-day::after {
+            width: 30px;
+            height: 30px;
+            background: #ffea70;
+            border-radius: 50%;
+            right: 20px;
+            top: -5px;
+            box-shadow: 0 0 15px #ffea70;
+        }
+
+        header.theme-sunset {
+            background: linear-gradient(160deg, #ffb3a7 0%, #ffc9ba 65%, #ffe5d9 100%);
+            border-color: #ffd6cc;
+        }
+
+        header.theme-sunset::after {
+            width: 32px;
+            height: 32px;
+            background: #ff7675;
+            border-radius: 50%;
+            right: 15px;
+            top: 12px;
+            box-shadow: 0 0 20px #ff7675;
+        }
+
+        header.theme-sunset::before {
+            opacity: 0.6;
+            background: #fff2f2;
+        }
+
+        header.theme-night {
+            background: linear-gradient(160deg, #2c3e50 0%, #34495e 65%, #1a252f 100%);
+            border-color: #34495e;
+        }
+
+        header.theme-night::after {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: transparent;
+            box-shadow: inset -6px 2px 0 2px #f1c40f;
+            right: 25px;
+            top: 6px;
+        }
+
+        header.theme-night::before {
+            opacity: 0.15;
+        }
+
+        header.theme-night h1 {
+            color: #ffffff;
+        }
+
+        header.theme-night .date {
+            color: #cbd5e1;
+        }
+
+        header.theme-night .chip {
+            background: #334155;
+            color: #f8fafc;
+            border: 1px solid #475569;
+        }
+
+        .date {
+            font-size: 11px;
+            color: var(--ink);
+            transition: color 0.3s;
+        }
+
+        h1 {
+            margin: 0 0 4px;
+            font-size: 16px;
+            color: var(--navy);
+            transition: color 0.3s;
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .chip {
+            background: #fff;
+            color: var(--navy);
+            border-radius: 12px;
+            padding: 0 8px;
+            font-size: 11px;
+            transition: all 0.3s;
+        }
+
+        /* 상태창 본문 디자인 */
+        h1,
+        h2,
+        h3,
+        .jua {
+            font-family: "Jua", sans-serif;
+            font-weight: 400;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1.5px solid var(--line);
+            border-radius: 12px;
+            padding: 8px 10px;
+            margin-top: 6px;
+        }
+
+        h2 {
+            margin: 0 0 4px;
+            font-size: 13px;
+            color: var(--h);
+        }
+
+        .love {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .love b {
+            font-family: "Jua", sans-serif;
+            font-weight: 400;
+            font-size: 15px;
+            color: var(--pinkt);
+        }
+
+        .bar {
+            flex: 1;
+            height: 8px;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            margin: 0;
+        }
+
+        .bar i {
+            display: block;
+            height: 100%;
+            width: 91%;
+            border-radius: 8px;
+            background: repeating-linear-gradient(135deg, #aed8f5 0 6px, #c9e6fa 6px 12px);
+            transition: width 0.3s ease-out;
+        }
+
+        .muted {
+            color: var(--soft);
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .quote {
+            margin: 0;
+            background: #fff;
+            border-radius: 10px;
+            padding: 5px 8px;
+            font-size: 11.5px;
+        }
+
+        .quote+.quote,
+        .quote+.q {
+            margin-top: 4px;
+        }
+
+        .face {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            margin-bottom: 4px;
+        }
+
+        .face span {
+            background: var(--sky2);
+            border-radius: 10px;
+            padding: 1px 8px;
+            font-size: 11px;
+            border: 1px solid var(--line);
+        }
+
+        .q {
+            background: var(--point-bg);
+            border-radius: 10px;
+            padding: 5px 8px;
+            font-size: 11.5px;
+            border: 1px solid var(--line);
+        }
+
+        .q em {
+            display: block;
+            font-style: normal;
+            color: var(--soft);
+            font-size: 10.5px;
+        }
+
+        .pages {
+            background: repeating-linear-gradient(var(--card), var(--card) 19px, var(--line) 20px);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 2px 8px;
+            line-height: 20px;
+            font-size: 11.5px;
+        }
+
+        .pages .l1 {
+            opacity: .6;
+        }
+
+        .pages .l2 {
+            font-weight: 700;
+        }
+
+        .pages cite {
+            display: block;
+            font-style: normal;
+            font-size: 10px;
+            color: var(--soft);
+            line-height: 1.3;
+            padding: 2px 0;
+        }
+
+        .card ul,
+        .card ol {
+            margin: 0;
+            padding-left: 16px;
+        }
+
+        .card li {
+            margin: 1px 0;
+            font-size: 11.5px;
+        }
+
+        .card li::marker {
+            color: var(--blue);
+        }
+
+        .tag {
+            display: inline-block;
+            font-size: 9.5px;
+            line-height: 1.3;
+            padding: 1px 6px;
+            border-radius: 8px;
+            margin-left: 2px;
+            background: #fff;
+            border: 1px solid var(--line);
+            color: var(--h);
+            vertical-align: 1px;
+            transition: all 0.2s;
+        }
+
+        .tag.plan {
+            background: var(--pink);
+            border-color: #f7d2df;
+            color: var(--pinkt);
+        }
+
+        .two {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+        }
+
+        .two>div {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 4px 8px;
+            font-size: 11.5px;
+        }
+
+        .two h3 {
+            margin: 0 0 2px;
+            font-size: 12px;
+            color: var(--h);
+        }
+
+        .goal {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 5px 8px;
+            margin-top: 4px;
+        }
+
+        .goal h3 {
+            margin: 0 0 2px;
+            font-size: 12px;
+            display: inline-block;
+        }
+
+        .goal p {
+            margin: 0;
+            font-size: 11px;
+            color: var(--soft);
+        }
+
+        .tmi {
+            margin-top: 6px;
+            text-align: center;
+            font-size: 11px;
+            background: var(--point-bg);
+            border-radius: 12px;
+            padding: 5px 10px;
+            color: var(--ink);
+            border: 1px solid var(--line);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout-container">
+
+        <!-- === 왼쪽 영역 (설정 패널) === -->
+        <div class="left-controls">
+
+            <div class="control-box">
+                <h3>💾 저장 및 백업</h3>
+                <div class="save-btns">
+                    <button onclick="saveAsImage()">📷 상태창 캡처하기 (PNG)</button>
+                    <button class="export-btn" onclick="exportCleanHTML()">🌐 완성된 결과만 추출 (HTML)</button>
+                    <button class="html-btn" onclick="saveAsHTML()">🛠️ 메이커 설정 백업 (HTML)</button>
+                </div>
+            </div>
+
+            <div class="control-box">
+                <h3>🪄 꾸미기</h3>
+                <div class="format-btns">
+                    <button onmousedown="event.preventDefault(); document.execCommand('bold', false, null);" title="굵게"><b>B</b></button>
+                    <button onmousedown="event.preventDefault(); document.execCommand('italic', false, null);" title="기울임"><i>I</i></button>
+                    <button onmousedown="event.preventDefault(); document.execCommand('underline', false, null);" title="밑줄"><u>U</u></button>
+                    <button onmousedown="event.preventDefault(); document.execCommand('strikeThrough', false, null);" title="취소선"><s>S</s></button>
+                    <button onmousedown="event.preventDefault(); document.execCommand('removeFormat', false, null);" title="서식 지우기">지우기</button>
+                </div>
+            </div>
+
+            <div class="control-box">
+                <h3>⚙️ 블럭 켜기/끄기</h3>
+                <div class="checkboxes">
+                    <label><input type="checkbox" checked onchange="toggleBlock('block-header', this)"> ☁️ 상단 헤더 (위치/날씨)</label>
+                    <label><input type="checkbox" checked onchange="toggleBlock('block-love', this)"> 💕 호감도</label>
+                    <label><input type="checkbox" checked onchange="toggleBlock('block-quote1', this)"> 🌌 심리 (단일)</label>
+                    <label><input type="checkbox" checked onchange="toggleBlock('block-quote2', this)"> 💬 심리 (문답)</label>
+                    <label><input type="checkbox" checked onchange="toggleBlock('block-tmi', this)"> 💡 TMI</label>
+                    <label><input type="checkbox" checked onchange="toggleBlock('block-note', this)"> 📚 노트</label>
+                    <label><input type="checkbox" checked onchange="toggleBlock('block-wish', this)"> ⭐ 위시</label>
+                    <label><input type="checkbox" checked onchange="toggleBlock('block-promise', this)"> 🤝 약속</label>
+                    <label><input type="checkbox" checked onchange="toggleBlock('block-todo', this)"> ✏️ 투두</label>
+                    <label><input type="checkbox" checked onchange="toggleBlock('block-plan', this)"> 🎯 기획</label>
+                </div>
+            </div>
+
+            <details class="guide-box">
+                <summary>💡 사용 꿀팁 모음 (클릭해서 열기)</summary>
+                <ul>
+                    <li><strong>이미지 캡처:</strong> 완성된 상태창을 깔끔한 그림 파일로 저장해 줍니다.</li>
+                    <li><strong>결과만 추출:</strong> 꺼져있는 블럭과 편집 도구를 모두 제거하고, <b>어디든 업로드할 수 있는 순수한 HTML 파일</b>만 다운로드합니다.</li>
+                    <li><strong>설정 백업:</strong> 수정한 내용, 설정, 순서를 그대로 담은 파일을 저장합니다. 다음 번에 이어서 작업할 때 엽니다.</li>
+                    <li><strong>꾸미기:</strong> 글자를 드래그하고 <b>🪄꾸미기</b> 버튼을 누르세요.</li>
+                    <li><strong>순서 변경:</strong> 카드의 <b>빈 공간(여백)</b>을 누르고 위아래로 당기세요.</li>
+                    <li><strong>태그 색상 변경:</strong> 태그를 <b>따닥!(더블 클릭)</b> 하면 색상이 바뀝니다.</li>
+                </ul>
+            </details>
+
+        </div>
+
+        <!-- === 오른쪽 영역 (상태창 본문) === -->
+        <div class="right-preview" id="capture-area">
+
+            <header class="draggable theme-day" id="block-header">
+                <div class="date" contenteditable="true">26.04.12. 화요일</div>
+                <h1 contenteditable="true">서울 강남, 성준언의 방</h1>
+                <div class="chips">
+                    <span class="chip time-input" contenteditable="true">🕛 11:58 PM</span>
+                    <span class="chip" contenteditable="true">🌙 맑음 (쌀쌀)</span>
+                </div>
+            </header>
+
+            <div class="card draggable" id="block-love">
+                <div class="love">💕 <b contenteditable="true" id="love-value">91</b>
+                    <div class="bar"><i id="love-bar" style="width: 91%;"></i></div>
+                </div>
+                <div class="muted" contenteditable="true">애정 있음. 자각 95%, 인정 10%.</div>
+            </div>
+
+            <div class="card draggable" id="block-quote1">
+                <h2 contenteditable="true">🌌</h2>
+                <p class="quote" contenteditable="true">아무것도 아니길 바랐다가, 결국 무엇이라도 되어줘서 다행인 사람.</p>
+            </div>
+
+            <div class="card draggable" id="block-quote2">
+                <div class="face">
+                    <span contenteditable="true">준언 (๑•́ ‸ •̀๑)</span>
+                    <span contenteditable="true">요한 (︶.︶)zZ</span>
+                </div>
+                <p class="quote" contenteditable="true">'무서워. 그래도 없는 것보다는 나아. 훨씬.'</p>
+                <div class="q" contenteditable="true">
+                    <em>Q. 성요한: "제일 무서운 게 뭐야?"</em>성준언: "…네가 아무것도 아니게 되는 거. 아니, 그 반대인가."
+                </div>
+            </div>
+
+            <div class="tmi draggable" id="block-tmi" contenteditable="true">💡 TMI · 성준언은 담배를 피운 뒤 꼭 손을 세 번 씻는다.</div>
+
+            <div class="card draggable" id="block-note">
+                <h2 contenteditable="true">📚 노트</h2>
+                <div class="pages" contenteditable="true">
+                    <div class="l1">"아무것도 아니었으면 좋겠다고 썼다.</div>
+                    <div class="l2">그 아래에 '거짓말'이라고 썼다."</div>
+                    <cite>첫 줄은 흐리고, 두 번째 줄만 진하다.</cite>
+                </div>
+            </div>
+
+            <div class="card draggable" id="block-wish">
+                <h2 contenteditable="true">⭐ 위시</h2>
+                <ol contenteditable="true">
+                    <li>도서관 4층 창가에서 단둘이 면접 연습하기</li>
+                    <li>아프면 아프다고 먼저 연락받기</li>
+                    <li>사이언티아에 나란히 합격하기</li>
+                </ol>
+            </div>
+
+            <div class="card draggable" id="block-promise">
+                <h2 contenteditable="true">🤝 약속</h2>
+                <ul contenteditable="true">
+                    <li>(준언↔요한) 모르는 척하지 않기 <span class="tag toggle-tag" contenteditable="true">진행 중</span></li>
+                    <li>(준언↔요한) 중간고사 등수 내기 (남들 앞 제외) <span class="tag toggle-tag" contenteditable="true">진행 중</span></li>
+                    <li>(요한→준언) 미분방정식 모델 허점 찾아주기 <span class="tag toggle-tag plan" contenteditable="true">예정</span></li>
+                </ul>
+            </div>
+
+            <div class="card draggable" id="block-todo">
+                <h2 contenteditable="true">✏️ 투두</h2>
+                <div class="two">
+                    <div contenteditable="true">
+                        <h3>준언</h3>1번 주제 대본<br>미적분 심화<br>답장 확인
+                    </div>
+                    <div contenteditable="true">
+                        <h3>요한</h3>모델 검토<br>2번 주제 대본<br>목 관리
+                    </div>
+                </div>
+            </div>
+
+            <div class="card draggable" id="block-plan">
+                <h2 contenteditable="true">🎯 기획</h2>
+                <div class="goal" contenteditable="true">
+                    <h3>사이언티아 면접 대비</h3> <span class="tag toggle-tag plan" contenteditable="true">단기 · ~4/17</span>
+                    <p><b>내용</b> 대본 수요일까지 완성, 상호 검토 · <b>이유</b> 같이 붙어야 하니까.</p>
+                </div>
+                <div class="goal" contenteditable="true">
+                    <h3>도망치지 않기</h3> <span class="tag toggle-tag" contenteditable="true">장기 · 기한 없음</span>
+                    <p><b>내용</b> 무서워도 화면을 엎어놓지 않는다. · <b>이유</b> 아무것도 아닌 밤으로 돌아가기 싫어서.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 스크립트 기능 -->
+    <script>
+        // === 1. 이미지 저장 기능 ===
+        function saveAsImage() {
+            if (document.activeElement) document.activeElement.blur();
+            const target = document.getElementById('capture-area');
+            html2canvas(target, {
+                scale: 2,
+                backgroundColor: "#ffffff",
+                useCORS: true
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = '상태창_캡처.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+
+        // === 2. 이어서 작업하기 위한 메이커 전체 백업 ===
+        function saveAsHTML() {
+            if (document.activeElement) document.activeElement.blur();
+            const checkboxes = document.querySelectorAll('.checkboxes input[type="checkbox"]');
+            checkboxes.forEach(cb => {
+                if (cb.checked) cb.setAttribute('checked', 'checked');
+                else cb.removeAttribute('checked');
+            });
+            const htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], {
+                type: "text/html;charset=utf-8"
+            });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "상태창_메이커_백업.html";
+            link.click();
+        }
+
+        // === 3. 다른 사이트 업로드용 깔끔한 결과물만 추출 ===
+        function exportCleanHTML() {
+            if (document.activeElement) document.activeElement.blur();
+
+            const clone = document.getElementById('capture-area').cloneNode(true);
+
+            // 숨겨진 블럭 제거
+            const hiddenBlocks = clone.querySelectorAll('[style*="display: none"]');
+            hiddenBlocks.forEach(block => block.remove());
+
+            // 편집, 드래그 속성 제거
+            clone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+            clone.querySelectorAll('.draggable').forEach(el => {
+                el.classList.remove('draggable', 'dragging');
+                el.removeAttribute('draggable');
+            });
+
+            clone.style.margin = "0 auto";
+            clone.style.maxWidth = "380px";
+
+            const styles = document.querySelector('style').outerHTML;
+            const fonts = `<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap" rel="stylesheet">`;
+
+            const cleanHTML = `<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <title>성준언 상태창</title>
+    ${fonts}
+    ${styles}
+    <style>
+        body { background-color: #f0f4f8; padding: 20px; }
+        .right-preview { flex: none !important; margin: 0 auto !important; }
+    </style>
+</head>
+<body>
+    ${clone.outerHTML}
+</body>
+</html>`;
+
+            const blob = new Blob([cleanHTML], {
+                type: "text/html;charset=utf-8"
+            });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "상태창_완성본_코드.html";
+            link.click();
+        }
+
+        // 블럭 온오프
+        function toggleBlock(blockId, checkbox) {
+            const block = document.getElementById(blockId);
+            if (block) block.style.display = checkbox.checked ? 'block' : 'none';
+        }
+
+        // 호감도 자동 연동
+        const loveValue = document.getElementById('love-value');
+        const loveBar = document.getElementById('love-bar');
+        loveValue.addEventListener('input', function() {
+            let val = parseInt(this.innerText.replace(/[^0-9]/g, '')) || 0;
+            if (val > 100) val = 100;
+            loveBar.style.width = val + '%';
+        });
+
+        // 태그 색상 전환
+        document.addEventListener('dblclick', function(e) {
+            if (e.target.classList.contains('toggle-tag')) {
+                window.getSelection().removeAllRanges();
+                e.target.classList.toggle('plan');
+            }
+        });
+
+        // 헤더 날씨(시간) 테마
+        function updateHeaderTheme() {
+            const timeChip = document.querySelector('.time-input');
+            if (!timeChip) return;
+            const text = timeChip.innerText;
+
+            let hour = -1;
+            const match = text.match(/(am|pm|오전|오후)?\s*(\d{1,2})(?:\s*:\s*\d{1,2})?\s*(am|pm|오전|오후)?/i);
+
+            if (match) {
+                let ind = (match[1] || match[3] || '').toLowerCase();
+                let h = parseInt(match[2]);
+                if (ind === 'pm' || ind === '오후') {
+                    hour = h === 12 ? 12 : h + 12;
+                } else if (ind === 'am' || ind === '오전') {
+                    hour = h === 12 ? 0 : h;
+                } else {
+                    hour = h;
+                }
+            } else {
+                if (text.includes('밤') || text.includes('새벽')) hour = 22;
+                else if (text.includes('노을') || text.includes('저녁')) hour = 18;
+                else if (text.includes('낮') || text.includes('아침') || text.includes('오전')) hour = 10;
+            }
+
+            const header = document.getElementById('block-header');
+            if (!header) return;
+
+            header.classList.remove('theme-day', 'theme-sunset', 'theme-night');
+            if (hour !== -1) {
+                if (hour >= 6 && hour < 17) header.classList.add('theme-day');
+                else if (hour >= 17 && hour < 19) header.classList.add('theme-sunset');
+                else header.classList.add('theme-night');
+            } else {
+                header.classList.add('theme-day');
+            }
+        }
+
+        const timeChipEl = document.querySelector('.time-input');
+        if (timeChipEl) {
+            timeChipEl.addEventListener('input', updateHeaderTheme);
+            updateHeaderTheme();
+        }
+
+        // 드래그 앤 드롭
+        document.addEventListener('mousedown', function(e) {
+            const block = e.target.closest('.draggable');
+            if (!block) return;
+            const isEditable = e.target.closest('[contenteditable="true"]');
+            const isTag = e.target.closest('.tag');
+            if (!isEditable && !isTag) block.setAttribute('draggable', 'true');
+        });
+
+        document.addEventListener('mouseup', function(e) {
+            const block = e.target.closest('.draggable');
+            if (block) block.setAttribute('draggable', 'false');
+        });
+
+        const draggables = document.querySelectorAll('.draggable');
+        const container = document.getElementById('capture-area');
+
+        draggables.forEach(draggable => {
+            draggable.addEventListener('dragstart', (e) => {
+                if (draggable.getAttribute('draggable') === 'false') {
+                    e.preventDefault();
+                    return;
+                }
+                draggable.classList.add('dragging');
+            });
+            draggable.addEventListener('dragend', () => {
+                draggable.classList.remove('dragging');
+                draggable.setAttribute('draggable', 'false');
+            });
+        });
+
+        container.addEventListener('dragover', e => {
+            e.preventDefault();
+            const afterElement = getDragAfterElement(container, e.clientY);
+            const draggable = document.querySelector('.dragging');
+            if (!draggable) return;
+
+            if (afterElement == null) container.appendChild(draggable);
+            else container.insertBefore(draggable, afterElement);
+        });
+
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+                if (offset < 0 && offset > closest.offset) return {
+                    offset: offset,
+                    element: child
+                }
+                else return closest;
+            }, {
+                offset: Number.NEGATIVE_INFINITY
+            }).element;
+        }
+    </script>
+</body>
+
+</html>
