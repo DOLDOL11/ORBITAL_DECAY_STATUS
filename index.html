@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>성준언 상태창 (Pro Maker V5)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --navy: #0a2540;
+            --ink: #1a365d;
+            --h: #1e5a85;
+            --soft: #5c7c9c;
+            --bg: #ffffff;
+            --card: #f4f9fd;
+            --line: #cbe4f7;
+            --sky: #d9eefa;
+            --sky2: #e5f3fc;
+            --pale: #edf6fc;
+            --blue: #6baef2;
+            --pink: #ffeaf0;
+            --pinkt: #d64973;
+            --point-bg: #e2f1fa;
+            --mid: #e6f4ea;
+            --midt: #1e7e34;
+            --midb: #c3e6cb;
+            box-sizing: border-box;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px 20px;
+            background-color: #f0f4f8;
+            font-family: "Apple SD Gothic Neo", sans-serif;
+        }
+
+        .layout-container {
+            display: flex;
+            gap: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        /* === 왼쪽: 메이커 컨트롤 패널 === */
+        .controls-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .ctrl-box {
+            background: #fff;
+            padding: 18px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            border: 1px solid #e1e8ed;
+        }
+
+        .ctrl-box h3 {
+            margin: 0 0 12px;
+            font-size: 15px;
+            color: #1a252f;
+            border-bottom: 2px solid #edf2f7;
+            padding-bottom: 8px;
+        }
+
+        .save-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .save-btns button {
+            background: var(--blue);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .save-btns button:hover {
+            background: #5a9ce2;
+        }
+
+        .save-btns button.html-btn {
+            background: #475569;
+        }
+
+        .save-btns button.export-btn {
+            background: #10b981;
+        }
+
+        .format-btns {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .format-btns button {
+            background: #f8f9fa;
+            border: 1px solid #d1d9e0;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+            color: #333;
+        }
+
+        .format-btns button:hover {
+            background: #e2e8f0;
+        }
+
+        details.ctrl-section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            overflow: hidden;
+        }
+
+        details.ctrl-section summary {
+            font-size: 13.5px;
+            font-weight: bold;
+            color: #1a252f;
+            padding: 12px 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            list-style: none;
+        }
+
+        details.ctrl-section summary::-webkit-details-marker {
+            display: none;
+        }
+
+        details.ctrl-section[open] summary {
+            border-bottom: 1px solid #e2e8f0;
+            background: #f1f5f9;
+        }
+
+        .ctrl-content {
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        input[type="text"],
+        textarea,
+        input[type="number"] {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 12px;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus,
+        input[type="number"]:focus {
+            border-color: var(--blue);
+        }
+
+        .row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .add-btn {
+            background: #e2e8f0;
+            color: #475569;
+            border: none;
+            padding: 6px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 4px;
+            flex: 1;
+        }
+
+        .add-btn:hover {
+            background: #cbd5e1;
+        }
+
+        .del-btn {
+            background: #fee2e2;
+            color: #ef4444;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .color-btn {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        details.guide-box {
+            background: #fff;
+            border: 1px solid #e1e8ed;
+            border-radius: 12px;
+            padding: 14px 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+            font-size: 13px;
+            line-height: 1.6;
+            color: #475569;
+            transition: all 0.3s;
+        }
+
+        details.guide-box summary {
+            font-size: 14px;
+            font-weight: bold;
+            color: #1a252f;
+            cursor: pointer;
+            list-style: none;
+            outline: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        details.guide-box summary::-webkit-details-marker {
+            display: none;
+        }
+
+        details.guide-box summary::after {
+            content: "▼";
+            font-size: 11px;
+            color: #94a3b8;
+            transition: transform 0.2s;
+        }
+
+        details.guide-box[open] summary::after {
+            transform: rotate(180deg);
+        }
+
+        details.guide-box ul {
+            margin: 12px 0 0;
+            padding-left: 20px;
+        }
+
+        details.guide-box li {
+            margin-bottom: 6px;
+        }
+
+        /* === 오른쪽: 상태창 프리뷰 === */
+        .preview-area {
+            flex: 0 0 380px;
+            background: var(--bg);
+            padding: 16px 12px 16px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            font: 12px/1.4 "Gowun Dodum", sans-serif;
+            color: var(--ink);
+            position: sticky;
+            top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .layout-container {
+                flex-direction: column-reverse;
+                align-items: center;
+            }
+
+            .preview-area,
+            .controls-area {
+                width: 100%;
+                max-width: 380px;
+                position: static;
+            }
+        }
+
+        [contenteditable="true"] {
+            outline: none;
+            transition: background 0.2s;
+            cursor: text;
+            min-height: 1em;
+            min-width: 20px;
+            display: inline-block;
+        }
+
+        [contenteditable="true"]:focus {
+            outline: 1px dashed var(--blue);
+            background: rgba(107, 174, 242, 0.08);
+            border-radius: 4px;
+        }
+
+        [contenteditable="true"]:empty::before {
+            content: attr(data-placeholder);
+            color: #94a3b8;
+            pointer-events: none;
+        }
+
+        .draggable {
+            cursor: grab;
+        }
+
+        .draggable:active {
+            cursor: grabbing;
+        }
+
+        .dragging {
+            opacity: 0.5;
+            border: 2px dashed var(--blue) !important;
+        }
+
+        /* === 헤더 테마 === */
+        header {
+            position: relative;
+            overflow: hidden;
+            border-radius: 14px;
+            padding: 10px 12px 8px;
+            border: 1.5px solid var(--line);
+            margin-bottom: 6px;
+            transition: background 0.5s ease;
+        }
+
+        header * {
+            position: relative;
+            z-index: 2;
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            width: 50px;
+            height: 14px;
+            right: 10px;
+            top: 12px;
+            background: #fff;
+            border-radius: 20px;
+            opacity: .85;
+            box-shadow: -12px 6px 0 -3px #fff, 10px 5px 0 -4px #fff;
+            pointer-events: none;
+            z-index: 1;
+            transition: opacity 0.5s;
+        }
+
+        header::after {
+            content: "";
+            position: absolute;
+            pointer-events: none;
+            z-index: 0;
+            transition: all 0.5s ease;
+        }
+
+        header.theme-day {
+            background: linear-gradient(160deg, #bce0fa 0%, #dcf0fd 65%, #f0f8ff 100%);
+        }
+
+        header.theme-day::after {
+            width: 30px;
+            height: 30px;
+            background: #ffea70;
+            border-radius: 50%;
+            right: 20px;
+            top: -5px;
+            box-shadow: 0 0 15px #ffea70;
+        }
+
+        header.theme-sunset {
+            background: linear-gradient(160deg, #ffb3a7 0%, #ffc9ba 65%, #ffe5d9 100%);
+            border-color: #ffd6cc;
+        }
+
+        header.theme-sunset::after {
+            width: 32px;
+            height: 32px;
+            background: #ff7675;
+            border-radius: 50%;
+            right: 15px;
+            top: 12px;
+            box-shadow: 0 0 20px #ff7675;
+        }
+
+        header.theme-sunset::before {
+            opacity: 0.6;
+            background: #fff2f2;
+        }
+
+        header.theme-night {
+            background: linear-gradient(160deg, #2c3e50 0%, #34495e 65%, #1a252f 100%);
+            border-color: #34495e;
+        }
+
+        header.theme-night::after {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: transparent;
+            box-shadow: inset -6px 2px 0 2px #f1c40f;
+            right: 25px;
+            top: 6px;
+        }
+
+        header.theme-night::before {
+            opacity: 0.15;
+        }
+
+        header.theme-night h1 {
+            color: #ffffff;
+        }
+
+        header.theme-night .date {
+            color: #cbd5e1;
+        }
+
+        header.theme-night .chip {
+            background: #334155;
+            color: #f8fafc;
+            border: 1px solid #475569;
+        }
+
+        .date {
+            font-size: 11px;
+            color: var(--ink);
+            transition: color 0.3s;
+            margin-bottom: 2px;
+        }
+
+        h1 {
+            margin: 0 0 4px;
+            font-size: 16px;
+            color: var(--navy);
+            transition: color 0.3s;
+            display: block;
+            width: 100%;
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .chip {
+            background: #fff;
+            color: var(--navy);
+            border-radius: 12px;
+            padding: 2px 8px;
+            font-size: 11px;
+            transition: all 0.3s;
+        }
+
+        /* 상태창 본문 디자인 */
+        h1,
+        h2,
+        h3,
+        .jua {
+            font-family: "Jua", sans-serif;
+            font-weight: 400;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1.5px solid var(--line);
+            border-radius: 12px;
+            padding: 8px 10px;
+            margin-top: 6px;
+        }
+
+        h2 {
+            margin: 0 0 4px;
+            font-size: 13px;
+            color: var(--h);
+            width: 100%;
+            display: block;
+        }
+
+        .love {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .love b {
+            font-family: "Jua", sans-serif;
+            font-weight: 400;
+            font-size: 15px;
+            color: var(--pinkt);
+        }
+
+        .bar {
+            flex: 1;
+            height: 8px;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            margin: 0;
+        }
+
+        .bar i {
+            display: block;
+            height: 100%;
+            width: 0%;
+            border-radius: 8px;
+            background: repeating-linear-gradient(135deg, #aed8f5 0 6px, #c9e6fa 6px 12px);
+            transition: width 0.3s ease-out;
+        }
+
+        .muted {
+            color: var(--soft);
+            font-size: 11px;
+            margin-top: 4px;
+            display: block;
+            width: 100%;
+        }
+
+        .quote {
+            margin: 0;
+            background: #fff;
+            border-radius: 10px;
+            padding: 5px 8px;
+            font-size: 11.5px;
+            display: block;
+            width: 100%;
+        }
+
+        .quote+.quote,
+        .quote+.q {
+            margin-top: 4px;
+        }
+
+        .face {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            margin-bottom: 4px;
+        }
+
+        .face span {
+            background: var(--sky2);
+            border-radius: 10px;
+            padding: 2px 8px;
+            font-size: 11px;
+            border: 1px solid var(--line);
+        }
+
+        .q {
+            background: var(--point-bg);
+            border-radius: 10px;
+            padding: 5px 8px;
+            font-size: 11.5px;
+            border: 1px solid var(--line);
+            display: block;
+        }
+
+        .q em {
+            display: block;
+            font-style: normal;
+            color: var(--soft);
+            font-size: 10.5px;
+            margin-bottom: 2px;
+        }
+
+        .pages {
+            background: repeating-linear-gradient(var(--card), var(--card) 19px, var(--line) 20px);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 4px 8px;
+            line-height: 20px;
+            font-size: 11.5px;
+        }
+
+        .note-line {
+            display: block;
+            width: 100%;
+            min-height: 20px;
+        }
+
+        .note-desc {
+            display: block;
+            width: 100%;
+            font-size: 10.5px;
+            color: var(--soft);
+            margin-top: 2px;
+            line-height: 1.4;
+            font-style: normal;
+        }
+
+        ul,
+        ol {
+            margin: 0;
+            padding-left: 16px;
+        }
+
+        li {
+            margin: 1px 0;
+            font-size: 11.5px;
+        }
+
+        li::marker {
+            color: var(--blue);
+        }
+
+        /* === 태그 3단계 색상 적용 === */
+        .tag {
+            display: inline-block;
+            font-size: 9.5px;
+            line-height: 1.3;
+            padding: 2px 6px;
+            border-radius: 8px;
+            margin-left: 4px;
+            background: #fff;
+            border: 1px solid var(--line);
+            color: var(--h);
+            vertical-align: middle;
+            cursor: text;
+            transition: all 0.2s;
+        }
+
+        .tag.plan {
+            background: var(--pink);
+            border-color: #f7d2df;
+            color: var(--pinkt);
+        }
+
+        .tag.mid {
+            background: var(--mid);
+            border-color: var(--midb);
+            color: var(--midt);
+        }
+
+        /* 기존 CSS 가상 요소 삭제됨 (이제 HTML 텍스트 자체를 수정함) */
+
+        .two {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+        }
+
+        .two>div {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 4px 8px;
+            font-size: 11.5px;
+        }
+
+        .two h3 {
+            margin: 0 0 2px;
+            font-size: 12px;
+            color: var(--h);
+            display: block;
+            width: 100%;
+        }
+
+        .goal {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 5px 8px;
+            margin-top: 4px;
+        }
+
+        .goal h3 {
+            margin: 0 0 2px;
+            font-size: 12px;
+            display: inline-block;
+        }
+
+        .goal p {
+            margin: 0;
+            font-size: 11px;
+            color: var(--soft);
+            display: block;
+            width: 100%;
+        }
+
+        .tmi {
+            margin-top: 6px;
+            text-align: center;
+            font-size: 11px;
+            background: var(--point-bg);
+            border-radius: 12px;
+            padding: 5px 10px;
+            color: var(--ink);
+            border: 1px solid var(--line);
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout-container">
+
+        <!-- === 왼쪽: 메이커 컨트롤 패널 === -->
+        <div class="controls-area">
+
+            <!-- 1. 글 꾸미기 박스 -->
+            <div class="ctrl-box">
+                <h3>🪄 글자 꾸미기</h3>
+                <div class="format-btns">
+                    <button onmousedown="event.preventDefault(); document.execCommand('bold', false, null);" title="굵게"><b>B</b></button>
+                    <button onmousedown="event.preventDefault(); document.execCommand('italic', false, null);" title="기울임"><i>I</i></button>
+                    <button onmousedown="event.preventDefault(); document.execCommand('underline', false, null);" title="밑줄"><u>U</u></button>
+                    <button onmousedown="event.preventDefault(); document.execCommand('strikeThrough', false, null);" title="취소선"><s>S</s></button>
+                    <button onmousedown="event.preventDefault(); document.execCommand('removeFormat', false, null);" title="서식 지우기">지우기</button>
+                </div>
+            </div>
+
+            <!-- 2. 블럭 통합 편집 (모두 접힘 기본) -->
+            <div class="ctrl-box">
+                <h3>⚙️ 블럭 편집 (켜기/끄기 및 내용)</h3>
+                <p style="font-size:11px; color:#64748b; margin:-4px 0 12px;">체크박스로 켜거나, 눌러서 세부 내용을 수정하세요.</p>
+
+                <details class="ctrl-section">
+                    <summary><input type="checkbox" checked onchange="toggleBlock('block-header', this)"> ☁️ 상단 헤더 (위치/날씨)</summary>
+                    <div class="ctrl-content">
+                        <input type="text" id="ctrl-date" placeholder="날짜 (예: 26.04.12. 화요일)">
+                        <input type="text" id="ctrl-title" placeholder="장소나 제목">
+                        <div class="row">
+                            <input type="text" id="ctrl-time" placeholder="시간 (예: PM 11:58)">
+                            <input type="text" id="ctrl-weather" placeholder="날씨">
+                        </div>
+                        <small style="color:#64748b; font-size:11px;">※ 시간에 '낮, 노을, 밤, PM 11시' 등을 적으면 배경이 자동 변환됩니다.</small>
+                    </div>
+                </details>
+
+                <details class="ctrl-section">
+                    <summary><input type="checkbox" checked onchange="toggleBlock('block-love', this)"> 💕 호감도</summary>
+                    <div class="ctrl-content">
+                        <div class="row">
+                            <input type="number" id="ctrl-love-val" placeholder="수치 (0~100)" style="width:80px;">
+                            <input type="text" id="ctrl-love-desc" placeholder="상태 설명">
+                        </div>
+                    </div>
+                </details>
+
+                <details class="ctrl-section">
+                    <summary><input type="checkbox" checked onchange="toggleBlock('block-quote1', this)"> 🌌 심리 (단일)</summary>
+                    <div class="ctrl-content">
+                        <input type="text" id="ctrl-q1-icon" placeholder="제목/아이콘">
+                        <textarea id="ctrl-q1-text" rows="2" placeholder="독백이나 인용구"></textarea>
+                    </div>
+                </details>
+
+                <details class="ctrl-section">
+                    <summary><input type="checkbox" checked onchange="toggleBlock('block-quote2', this)"> 💬 심리 (문답)</summary>
+                    <div class="ctrl-content">
+                        <div class="row">
+                            <input type="text" id="ctrl-q2-f1" placeholder="A 얼굴">
+                            <input type="text" id="ctrl-q2-f2" placeholder="B 얼굴">
+                        </div>
+                        <textarea id="ctrl-q2-text" rows="2" placeholder="속마음"></textarea>
+                        <input type="text" id="ctrl-q2-q" placeholder="Q. 질문">
+                        <textarea id="ctrl-q2-a" rows="2" placeholder="A. 대답"></textarea>
+                    </div>
+                </details>
+
+                <details class="ctrl-section">
+                    <summary><input type="checkbox" checked onchange="toggleBlock('block-tmi', this)"> 💡 TMI</summary>
+                    <div class="ctrl-content">
+                        <input type="text" id="ctrl-tmi" placeholder="TMI 내용을 적어주세요">
+                    </div>
+                </details>
+
+                <details class="ctrl-section">
+                    <summary><input type="checkbox" checked onchange="toggleBlock('block-note', this)"> 📚 노트</summary>
+                    <div class="ctrl-content">
+                        <input type="text" id="ctrl-note-icon" placeholder="제목 (📚 노트)">
+                        <div id="ctrl-note-container"></div>
+                        <div class="row">
+                            <button class="add-btn" onclick="addNoteLine()">+ 글쓰기 줄 추가</button>
+                            <button class="add-btn" onclick="addNoteDesc()">+ 작고 흐린 서술 추가</button>
+                        </div>
+                    </div>
+                </details>
+
+                <details class="ctrl-section">
+                    <summary><input type="checkbox" checked onchange="toggleBlock('block-wish', this)"> ⭐ 위시 리스트</summary>
+                    <div class="ctrl-content">
+                        <input type="text" id="ctrl-wish-title" placeholder="제목 (⭐ 위시)">
+                        <div id="ctrl-wish-container"></div>
+                        <button class="add-btn" style="width:100%" onclick="addWish()">+ 항목 추가</button>
+                    </div>
+                </details>
+
+                <details class="ctrl-section">
+                    <summary><input type="checkbox" checked onchange="toggleBlock('block-promise', this)"> 🤝 약속</summary>
+                    <div class="ctrl-content">
+                        <input type="text" id="ctrl-promise-title" placeholder="제목 (🤝 약속)">
+                        <div id="ctrl-promise-container"></div>
+                        <button class="add-btn" style="width:100%" onclick="addPromise()">+ 약속 추가</button>
+                    </div>
+                </details>
+
+                <details class="ctrl-section">
+                    <summary><input type="checkbox" checked onchange="toggleBlock('block-todo', this)"> ✏️ 투두</summary>
+                    <div class="ctrl-content">
+                        <input type="text" id="ctrl-todo-title" placeholder="제목 (✏️ 투두)">
+                        <div class="row">
+                            <div style="flex:1">
+                                <input type="text" id="ctrl-todo-n1" placeholder="인물 1" style="margin-bottom:4px;">
+                                <textarea id="ctrl-todo-t1" rows="3" placeholder="할일 목록"></textarea>
+                            </div>
+                            <div style="flex:1">
+                                <input type="text" id="ctrl-todo-n2" placeholder="인물 2" style="margin-bottom:4px;">
+                                <textarea id="ctrl-todo-t2" rows="3" placeholder="할일 목록"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+
+                <details class="ctrl-section">
+                    <summary><input type="checkbox" checked onchange="toggleBlock('block-plan', this)"> 🎯 기획</summary>
+                    <div class="ctrl-content">
+                        <input type="text" id="ctrl-plan-title" placeholder="제목 (🎯 기획)">
+                        <div id="ctrl-plan-container"></div>
+                        <button class="add-btn" style="width:100%" onclick="addPlan()">+ 기획 추가</button>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 3. 가이드 꿀팁 -->
+            <details class="guide-box">
+                <summary>💡 사용 꿀팁 모음 (클릭)</summary>
+                <ul>
+                    <li><strong>기획 태그 마법:</strong> 태그를 <b>따닥!(더블 클릭)</b> 하거나 🎨버튼을 누르면 색상이 <b>[기본 ➔ 예정 ➔ 중기]</b> 순으로 바뀌며 안의 내용(단기/중기/장기)도 같이 자동으로 수정됩니다. 물론 내용 직접 수정도 가능합니다.</li>
+                    <li><strong>안내글 유지 저장:</strong> 텍스트를 비워둔 채 이미지나 결과물을 저장해도 회색 안내글이 사라지지 않고 유지됩니다. 배포용 빈 껍데기 카드를 만들 때 유용합니다.</li>
+                    <li><strong>블럭 순서 변경:</strong> 오른쪽 상태창에서 카드의 <b>빈 공간(여백)</b>을 누르고 위아래로 당겨서 순서를 바꿀 수 있습니다.</li>
+                    <li><strong>작업 백업하기:</strong> 저장된 설정 백업(HTML) 파일을 컴퓨터에서 그냥 더블클릭하면 쓰던 내용 그대로 이어서 수정할 수 있습니다!</li>
+                </ul>
+            </details>
+
+            <!-- 4. 완료 및 내보내기 (맨 아래로) -->
+            <div class="ctrl-box">
+                <h3>💾 완료 및 내보내기</h3>
+                <div class="save-btns">
+                    <button onclick="saveAsImage()">📷 이미지로 캡처하기 (PNG)</button>
+                    <button class="export-btn" onclick="exportCleanHTML()">🌐 완성된 결과만 추출 (HTML)</button>
+                    <button class="html-btn" onclick="saveAsHTML()">🛠️ 작업 내역 백업 (HTML)</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- === 오른쪽: 상태창 프리뷰 === -->
+        <div class="preview-area" id="capture-area">
+
+            <header class="draggable theme-day" id="block-header">
+                <div class="date" id="prev-date" contenteditable="true" data-placeholder="YY.MM.DD. 요일"></div>
+                <h1 id="prev-title" contenteditable="true" data-placeholder="장소나 제목을 입력하세요"></h1>
+                <div class="chips">
+                    <span class="chip time-input" id="prev-time" contenteditable="true" data-placeholder="시간 (예: PM 11:58)"></span>
+                    <span class="chip" id="prev-weather" contenteditable="true" data-placeholder="날씨 (예: 맑음)"></span>
+                </div>
+            </header>
+
+            <div class="card draggable" id="block-love">
+                <div class="love">💕 <b id="prev-love-val" contenteditable="true" data-placeholder="0"></b>
+                    <div class="bar"><i id="love-bar"></i></div>
+                </div>
+                <div class="muted" id="prev-love-desc" contenteditable="true" data-placeholder="애정 상태에 대한 설명을 적어주세요."></div>
+            </div>
+
+            <div class="card draggable" id="block-quote1">
+                <h2 id="prev-q1-icon" contenteditable="true" data-placeholder="🌌"></h2>
+                <p class="quote" id="prev-q1-text" contenteditable="true" data-placeholder="혼자만의 심리 상태나 독백을 적어보세요."></p>
+            </div>
+
+            <div class="card draggable" id="block-quote2">
+                <div class="face">
+                    <span id="prev-q2-f1" contenteditable="true" data-placeholder="A의 표정"></span>
+                    <span id="prev-q2-f2" contenteditable="true" data-placeholder="B의 표정"></span>
+                </div>
+                <p class="quote" id="prev-q2-text" contenteditable="true" data-placeholder="속마음이나 인용구"></p>
+                <div class="q">
+                    <em id="prev-q2-q" contenteditable="true" data-placeholder="Q. 질문을 적어주세요."></em>
+                    <span id="prev-q2-a" contenteditable="true" data-placeholder="A. 대답을 적어주세요."></span>
+                </div>
+            </div>
+
+            <div class="tmi draggable" id="block-tmi" contenteditable="true" data-placeholder="💡 TMI · 인물에 대한 가벼운 정보를 적어보세요."></div>
+
+            <div class="card draggable" id="block-note">
+                <h2 id="prev-note-icon" contenteditable="true" data-placeholder="📚 노트"></h2>
+                <div class="pages dynamic-list" id="list-note" data-type="note"></div>
+            </div>
+
+            <div class="card draggable" id="block-wish">
+                <h2 id="prev-wish-title" contenteditable="true" data-placeholder="⭐ 위시"></h2>
+                <ol id="list-wish" class="dynamic-list" data-type="wish"></ol>
+            </div>
+
+            <div class="card draggable" id="block-promise">
+                <h2 id="prev-promise-title" contenteditable="true" data-placeholder="🤝 약속"></h2>
+                <ul id="list-promise" class="dynamic-list" data-type="promise"></ul>
+            </div>
+
+            <div class="card draggable" id="block-todo">
+                <h2 id="prev-todo-title" contenteditable="true" data-placeholder="✏️ 투두"></h2>
+                <div class="two">
+                    <div>
+                        <h3 id="prev-todo-n1" contenteditable="true" data-placeholder="인물 1"></h3>
+                        <span id="prev-todo-t1" contenteditable="true" data-placeholder="할 일 목록"></span>
+                    </div>
+                    <div>
+                        <h3 id="prev-todo-n2" contenteditable="true" data-placeholder="인물 2"></h3>
+                        <span id="prev-todo-t2" contenteditable="true" data-placeholder="할 일 목록"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card draggable" id="block-plan">
+                <h2 id="prev-plan-title" contenteditable="true" data-placeholder="🎯 기획"></h2>
+                <div id="list-plan" class="dynamic-list" data-type="plan"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // === 기초 동기화 함수 ===
+        function bindSync(prevId, ctrlId) {
+            const prev = document.getElementById(prevId);
+            const ctrl = document.getElementById(ctrlId);
+            if (!prev || !ctrl) return;
+
+            prev.addEventListener('input', () => {
+                if (ctrl.tagName === 'INPUT' || ctrl.tagName === 'TEXTAREA') ctrl.value = prev.innerText;
+                else ctrl.innerText = prev.innerText;
+            });
+            ctrl.addEventListener('input', () => {
+                prev.innerText = ctrl.value;
+                if (prevId === 'prev-time') updateHeaderTheme();
+                if (prevId === 'prev-love-val') updateLoveBar(ctrl.value);
+            });
+        }
+
+        const staticFields = [
+            ['prev-date', 'ctrl-date'],
+            ['prev-title', 'ctrl-title'],
+            ['prev-time', 'ctrl-time'],
+            ['prev-weather', 'ctrl-weather'],
+            ['prev-love-val', 'ctrl-love-val'],
+            ['prev-love-desc', 'ctrl-love-desc'],
+            ['prev-q1-icon', 'ctrl-q1-icon'],
+            ['prev-q1-text', 'ctrl-q1-text'],
+            ['prev-q2-f1', 'ctrl-q2-f1'],
+            ['prev-q2-f2', 'ctrl-q2-f2'],
+            ['prev-q2-text', 'ctrl-q2-text'],
+            ['prev-q2-q', 'ctrl-q2-q'],
+            ['prev-q2-a', 'ctrl-q2-a'],
+            ['block-tmi', 'ctrl-tmi'],
+            ['prev-note-icon', 'ctrl-note-icon'],
+            ['prev-wish-title', 'ctrl-wish-title'],
+            ['prev-promise-title', 'ctrl-promise-title'],
+            ['prev-plan-title', 'ctrl-plan-title'],
+            ['prev-todo-title', 'ctrl-todo-title'],
+            ['prev-todo-n1', 'ctrl-todo-n1'],
+            ['prev-todo-t1', 'ctrl-todo-t1'],
+            ['prev-todo-n2', 'ctrl-todo-n2'],
+            ['prev-todo-t2', 'ctrl-todo-t2']
+        ];
+        staticFields.forEach(f => bindSync(f[0], f[1]));
+
+        // === 동적 리스트 생성/삭제 함수 ===
+        function removeRow(id) {
+            const prev = document.getElementById('prev-' + id);
+            const ctrl = document.getElementById('ctrl-' + id);
+            if (prev) prev.remove();
+            if (ctrl) ctrl.remove();
+        }
+
+        function addNoteLine(text = "") {
+            const id = 'noteline-' + Math.floor(Math.random() * 10000);
+            const div = document.createElement('div');
+            div.id = 'prev-' + id;
+            div.className = 'note-line main-text';
+            div.contentEditable = "true";
+            div.dataset.placeholder = "노트 내용을 적으세요.";
+            div.innerText = text;
+            document.getElementById('list-note').appendChild(div);
+
+            const ctrlDiv = document.createElement('div');
+            ctrlDiv.id = 'ctrl-' + id;
+            ctrlDiv.className = 'row';
+            ctrlDiv.style.marginBottom = '4px';
+            ctrlDiv.innerHTML = `
+                <textarea id="ctrl-t-${id}" placeholder="노트 문단 작성" rows="2" style="flex:1;">${text}</textarea>
+                <button class="del-btn" onclick="removeRow('${id}')">✖</button>
+            `;
+            document.getElementById('ctrl-note-container').appendChild(ctrlDiv);
+            bindSync(`prev-${id}`, `ctrl-t-${id}`);
+        }
+
+        function addNoteDesc(text = "") {
+            const id = 'notedesc-' + Math.floor(Math.random() * 10000);
+            const cite = document.createElement('cite');
+            cite.id = 'prev-' + id;
+            cite.className = 'note-desc main-text';
+            cite.contentEditable = "true";
+            cite.dataset.placeholder = "글씨체 서술 등 부가 설명";
+            cite.innerText = text;
+            document.getElementById('list-note').appendChild(cite);
+
+            const ctrlDiv = document.createElement('div');
+            ctrlDiv.id = 'ctrl-' + id;
+            ctrlDiv.className = 'row';
+            ctrlDiv.style.marginBottom = '4px';
+            ctrlDiv.innerHTML = `
+                <input type="text" id="ctrl-t-${id}" placeholder="작고 흐린 서술 작성" style="flex:1" value="${text}">
+                <button class="del-btn" onclick="removeRow('${id}')">✖</button>
+            `;
+            document.getElementById('ctrl-note-container').appendChild(ctrlDiv);
+            bindSync(`prev-${id}`, `ctrl-t-${id}`);
+        }
+
+        function addWish(text = "") {
+            const id = 'wish-' + Math.floor(Math.random() * 10000);
+            const li = document.createElement('li');
+            li.id = 'prev-' + id;
+            li.innerHTML = `<span id="prev-t-${id}" class="main-text" contenteditable="true" data-placeholder="위시 내용">${text}</span>`;
+            document.getElementById('list-wish').appendChild(li);
+
+            const ctrlDiv = document.createElement('div');
+            ctrlDiv.id = 'ctrl-' + id;
+            ctrlDiv.className = 'row';
+            ctrlDiv.style.marginBottom = '4px';
+            ctrlDiv.innerHTML = `
+                <input type="text" id="ctrl-t-${id}" placeholder="위시 내용" value="${text}">
+                <button class="del-btn" onclick="removeRow('${id}')">✖</button>
+            `;
+            document.getElementById('ctrl-wish-container').appendChild(ctrlDiv);
+            bindSync(`prev-t-${id}`, `ctrl-t-${id}`);
+        }
+
+        function addPromise(text = "", tag = "") {
+            const id = 'promise-' + Math.floor(Math.random() * 10000);
+            const li = document.createElement('li');
+            li.id = 'prev-' + id;
+            li.innerHTML = `
+                <span id="prev-t-${id}" class="main-text" contenteditable="true" data-placeholder="약속 내용을 적으세요">${text}</span>
+                <span id="prev-tg-${id}" class="tag toggle-tag" contenteditable="true" data-placeholder="상태">${tag}</span>
+            `;
+            document.getElementById('list-promise').appendChild(li);
+
+            const ctrlDiv = document.createElement('div');
+            ctrlDiv.id = 'ctrl-' + id;
+            ctrlDiv.className = 'row';
+            ctrlDiv.style.marginBottom = '4px';
+            ctrlDiv.innerHTML = `
+                <input type="text" id="ctrl-t-${id}" placeholder="약속 내용" style="flex:1" value="${text}">
+                <input type="text" id="ctrl-tg-${id}" placeholder="태그" style="width:70px;" value="${tag}">
+                <button class="color-btn" onclick="toggleTagState('prev-tg-${id}')" title="상태/색상 변경">🎨</button>
+                <button class="del-btn" onclick="removeRow('${id}')">✖</button>
+            `;
+            document.getElementById('ctrl-promise-container').appendChild(ctrlDiv);
+            bindSync(`prev-t-${id}`, `ctrl-t-${id}`);
+            bindSync(`prev-tg-${id}`, `ctrl-tg-${id}`);
+        }
+
+        function addPlan(title = "", tag = " / 단기", desc = "") {
+            const id = 'plan-' + Math.floor(Math.random() * 10000);
+            const div = document.createElement('div');
+            div.id = 'prev-' + id;
+            div.className = 'goal';
+            div.innerHTML = `
+                <h3 id="prev-t-${id}" class="main-text" contenteditable="true" data-placeholder="기획 제목">${title}</h3>
+                <span id="prev-tg-${id}" class="tag toggle-tag plan-type plan" contenteditable="true" data-placeholder="기간 / 단기">${tag}</span>
+                <p id="prev-d-${id}" contenteditable="true" data-placeholder="세부 내용이나 이유를 적으세요">${desc}</p>
+            `;
+            document.getElementById('list-plan').appendChild(div);
+
+            const ctrlDiv = document.createElement('div');
+            ctrlDiv.id = 'ctrl-' + id;
+            ctrlDiv.style.marginBottom = '8px';
+            ctrlDiv.style.padding = '8px';
+            ctrlDiv.style.background = '#f8fafc';
+            ctrlDiv.style.border = '1px solid #e2e8f0';
+            ctrlDiv.style.borderRadius = '8px';
+            ctrlDiv.innerHTML = `
+                <div class="row" style="margin-bottom:4px;">
+                    <input type="text" id="ctrl-t-${id}" placeholder="기획 제목" style="flex:1" value="${title}">
+                    <input type="text" id="ctrl-tg-${id}" placeholder="기간 / 단기" style="width:110px;" value="${tag}">
+                    <button class="color-btn" onclick="toggleTagState('prev-tg-${id}')" title="색상 및 단기/중기/장기 스위치">🎨</button>
+                    <button class="del-btn" onclick="removeRow('${id}')">✖</button>
+                </div>
+                <textarea id="ctrl-d-${id}" rows="2" placeholder="세부 내용">${desc}</textarea>
+            `;
+            document.getElementById('ctrl-plan-container').appendChild(ctrlDiv);
+            bindSync(`prev-t-${id}`, `ctrl-t-${id}`);
+            bindSync(`prev-tg-${id}`, `ctrl-tg-${id}`);
+            bindSync(`prev-d-${id}`, `ctrl-d-${id}`);
+        }
+
+        // 페이지 로딩 시 빈칸 1개씩 추가
+        addNoteLine();
+        addWish();
+        addPromise();
+        addPlan();
+
+        // 엔터 버그 차단 (노트는 허용)
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const listContainer = e.target.closest('.dynamic-list');
+                if (listContainer) {
+                    const type = listContainer.dataset.type;
+                    if (type === 'note') return;
+
+                    e.preventDefault();
+                    if (type === 'wish') addWish();
+                    if (type === 'promise') addPromise();
+                    if (type === 'plan') addPlan("", " / 단기", ""); // 기획은 새로 추가할 때 /단기를 기본 세팅
+                    setTimeout(() => {
+                        const items = listContainer.querySelectorAll('.main-text');
+                        if (items.length > 0) items[items.length - 1].focus();
+                    }, 10);
+                }
+            }
+        });
+
+        // === 부가 기능들 ===
+        function toggleBlock(blockId, checkbox) {
+            const block = document.getElementById(blockId);
+            if (block) block.style.display = checkbox.checked ? 'block' : 'none';
+        }
+
+        function updateLoveBar(valText) {
+            let val = parseInt(valText.replace(/[^0-9]/g, '')) || 0;
+            if (val > 100) val = 100;
+            document.getElementById('love-bar').style.width = val + '%';
+        }
+
+        // [핵심] 태그 색상 전환 3단계 + 단기/중기/장기 자동 치환 로직
+        function toggleTagState(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            window.getSelection().removeAllRanges();
+
+            let isPlanType = el.classList.contains('plan-type');
+            let text = el.innerText;
+            let nextSuffix = "";
+
+            if (el.classList.contains('plan')) { // 핑크(단기/예정) -> 민트(중기)
+                el.classList.remove('plan');
+                el.classList.add('mid');
+                nextSuffix = "중기";
+            } else if (el.classList.contains('mid')) { // 민트(중기) -> 파랑(장기/기본)
+                el.classList.remove('mid');
+                nextSuffix = "장기";
+            } else { // 파랑(장기) -> 핑크(단기)
+                el.classList.add('plan');
+                nextSuffix = "단기";
+            }
+
+            // 기획(plan-type) 태그인 경우 텍스트 안의 글자를 직접 수정해 줌 (에디터 속성 유지됨)
+            if (isPlanType) {
+                if (text.trim() === '' || text === el.getAttribute('data-placeholder')) {
+                    text = " / " + nextSuffix;
+                } else if (/(단기|중기|장기)/.test(text)) {
+                    text = text.replace(/(단기|중기|장기)/, nextSuffix);
+                } else {
+                    text = text + " / " + nextSuffix;
+                }
+                el.innerText = text;
+
+                const ctrlId = el.id.replace('prev-', 'ctrl-');
+                const ctrlInput = document.getElementById(ctrlId);
+                if (ctrlInput) ctrlInput.value = text;
+            }
+        }
+
+        document.addEventListener('dblclick', function(e) {
+            if (e.target.classList.contains('toggle-tag')) {
+                toggleTagState(e.target.id);
+            }
+        });
+
+        // 자동 시간 테마
+        function updateHeaderTheme() {
+            const timeChip = document.getElementById('prev-time');
+            if (!timeChip) return;
+            const text = timeChip.innerText;
+            let hour = -1;
+            const match = text.match(/(am|pm|오전|오후)?\s*(\d{1,2})(?:\s*:\s*\d{1,2})?\s*(am|pm|오전|오후)?/i);
+
+            if (match) {
+                let ind = (match[1] || match[3] || '').toLowerCase();
+                let h = parseInt(match[2]);
+                if (ind === 'pm' || ind === '오후') {
+                    hour = h === 12 ? 12 : h + 12;
+                } else if (ind === 'am' || ind === '오전') {
+                    hour = h === 12 ? 0 : h;
+                } else {
+                    hour = h;
+                }
+            } else {
+                if (text.includes('밤') || text.includes('새벽')) hour = 22;
+                else if (text.includes('노을') || text.includes('저녁')) hour = 18;
+                else if (text.includes('낮') || text.includes('아침') || text.includes('오전')) hour = 10;
+            }
+
+            const header = document.getElementById('block-header');
+            if (!header) return;
+            header.classList.remove('theme-day', 'theme-sunset', 'theme-night');
+            if (hour !== -1) {
+                if (hour >= 6 && hour < 17) header.classList.add('theme-day');
+                else if (hour >= 17 && hour < 19) header.classList.add('theme-sunset');
+                else header.classList.add('theme-night');
+            } else {
+                header.classList.add('theme-day');
+            }
+        }
+
+        // 드래그 로직 (빈공간 누를 때만)
+        document.addEventListener('mousedown', function(e) {
+            const block = e.target.closest('.draggable');
+            if (!block) return;
+            const isEditable = e.target.closest('[contenteditable="true"]');
+            const isTag = e.target.closest('.tag');
+            if (!isEditable && !isTag) block.setAttribute('draggable', 'true');
+        });
+        document.addEventListener('mouseup', function(e) {
+            const block = e.target.closest('.draggable');
+            if (block) block.setAttribute('draggable', 'false');
+        });
+
+        const draggables = document.querySelectorAll('.draggable');
+        const container = document.getElementById('capture-area');
+
+        draggables.forEach(draggable => {
+            draggable.addEventListener('dragstart', (e) => {
+                if (draggable.getAttribute('draggable') === 'false') {
+                    e.preventDefault();
+                    return;
+                }
+                draggable.classList.add('dragging');
+            });
+            draggable.addEventListener('dragend', () => {
+                draggable.classList.remove('dragging');
+                draggable.setAttribute('draggable', 'false');
+            });
+        });
+
+        container.addEventListener('dragover', e => {
+            e.preventDefault();
+            const afterElement = [...container.querySelectorAll('.draggable:not(.dragging)')].reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = e.clientY - box.top - box.height / 2;
+                if (offset < 0 && offset > closest.offset) return {
+                    offset: offset,
+                    element: child
+                }
+                else return closest;
+            }, {
+                offset: Number.NEGATIVE_INFINITY
+            }).element;
+
+            const draggable = document.querySelector('.dragging');
+            if (draggable) {
+                if (afterElement == null) container.appendChild(draggable);
+                else container.insertBefore(draggable, afterElement);
+            }
+        });
+
+        // === 내보내기/저장 관련 공통 함수 (가이드 유지) ===
+        function fillEmptyPlaceholders(target) {
+            const empties = [];
+            target.querySelectorAll('[contenteditable="true"]').forEach(el => {
+                if (el.innerText.trim() === '' || el.innerHTML === '<br>') {
+                    empties.push(el);
+                    el.innerText = el.getAttribute('data-placeholder') || '';
+                    el.style.color = '#94a3b8';
+                }
+            });
+            return empties;
+        }
+
+        function restoreEmpties(empties) {
+            empties.forEach(el => {
+                el.innerText = '';
+                el.style.color = '';
+            });
+        }
+
+        function saveAsImage() {
+            if (document.activeElement) document.activeElement.blur();
+            const target = document.getElementById('capture-area');
+            const empties = fillEmptyPlaceholders(target);
+
+            html2canvas(target, {
+                scale: 2,
+                backgroundColor: "#ffffff",
+                useCORS: true
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = '상태창_캡처.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                restoreEmpties(empties);
+            });
+        }
+
+        function saveAsHTML() {
+            if (document.activeElement) document.activeElement.blur();
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(cb => {
+                if (cb.checked) cb.setAttribute('checked', 'checked');
+                else cb.removeAttribute('checked');
+            });
+
+            const inputs = document.querySelectorAll('input[type="text"], input[type="number"]');
+            inputs.forEach(i => i.setAttribute('value', i.value));
+            const textareas = document.querySelectorAll('textarea');
+            textareas.forEach(t => t.innerHTML = t.value);
+
+            const htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], {
+                type: "text/html;charset=utf-8"
+            });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "상태창_작업백업.html";
+            link.click();
+        }
+
+        function exportCleanHTML() {
+            if (document.activeElement) document.activeElement.blur();
+            const clone = document.getElementById('capture-area').cloneNode(true);
+
+            clone.querySelectorAll('[style*="display: none"]').forEach(block => block.remove());
+
+            clone.querySelectorAll('[contenteditable="true"]').forEach(el => {
+                if (el.innerText.trim() === '' || el.innerHTML === '<br>') {
+                    el.innerText = el.getAttribute('data-placeholder') || '';
+                    el.style.color = '#94a3b8';
+                }
+                el.removeAttribute('contenteditable');
+                el.removeAttribute('data-placeholder');
+            });
+
+            clone.querySelectorAll('.draggable').forEach(el => {
+                el.classList.remove('draggable', 'dragging');
+                el.removeAttribute('draggable');
+            });
+
+            clone.style.margin = "0 auto";
+            clone.style.maxWidth = "380px";
+            clone.style.position = "static";
+
+            const styles = document.querySelector('style').outerHTML;
+            const fonts = `<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap" rel="stylesheet">`;
+            const cleanHTML = `<!DOCTYPE html>\n<html lang="ko">\n<head>\n<meta charset="utf-8">\n<title>성준언 상태창</title>\n${fonts}\n${styles}\n<style>body { background-color: transparent; padding: 20px; }</style>\n</head>\n<body>\n${clone.outerHTML}\n</body>\n</html>`;
+
+            const blob = new Blob([cleanHTML], {
+                type: "text/html;charset=utf-8"
+            });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "상태창_배포코드.html";
+            link.click();
+        }
+    </script>
+</body>
+
+</html>
