@@ -1,0 +1,3135 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>성준언 상태창 (Pro Maker V22 - Perfect Details)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&family=Gowun+Dodum&family=IBM+Plex+Mono:wght@400;500;600&family=Jua&family=Nanum+Myeongjo&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
+    <style>
+        @font-face {
+            font-family: 'NeoDunggeunmo';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.3/NeoDunggeunmo.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'RIDIBatang';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/RIDIBatang.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Galmuri11';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/Galmuri11.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Paperlogy-Regular';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-Regular.woff2') format('woff2');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        /* 폰트 테마 */
+        #capture-area[data-font="gothic"] * {
+            font-family: "Gowun Dodum", sans-serif;
+        }
+
+        #capture-area[data-font="gothic"] h1,
+        #capture-area[data-font="gothic"] h2,
+        #capture-area[data-font="gothic"] .bgm-title,
+        #capture-area[data-font="gothic"] .dev-title {
+            font-family: "Jua", sans-serif;
+        }
+
+        #capture-area[data-font="myeongjo"] * {
+            font-family: "Nanum Myeongjo", serif;
+        }
+
+        #capture-area[data-font="batang"] * {
+            font-family: "Gowun Batang", serif;
+        }
+
+        #capture-area[data-font="ridi"] * {
+            font-family: 'RIDIBatang', serif;
+        }
+
+        #capture-area[data-font="paperlogy"] * {
+            font-family: 'Paperlogy-Regular', sans-serif;
+        }
+
+        #capture-area[data-font="pixel"] * {
+            font-family: 'NeoDunggeunmo', monospace;
+        }
+
+        #capture-area[data-font="pixel"] .tag,
+        #capture-area[data-font="pixel"] .dd-badge {
+            font-size: 11px;
+            padding: 4px 6px;
+        }
+
+        #capture-area[data-font="galmuri"] * {
+            font-family: 'Galmuri11', monospace;
+        }
+
+        #capture-area[data-font="galmuri"] .tag,
+        #capture-area[data-font="galmuri"] .dd-badge {
+            font-size: 11px;
+            padding: 4px 6px;
+        }
+
+        #capture-area[data-font="orbitron"] * {
+            font-family: "Orbitron", sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        #capture-area[data-font="ibm"] * {
+            font-family: "IBM Plex Mono", monospace;
+        }
+
+        /* 색상 테마 변수 */
+        :root {
+            --navy: #0a2540;
+            --ink: #1a365d;
+            --h: #1e5a85;
+            --soft: #5c7c9c;
+            --bg: #ffffff;
+            --card: #f4f9fd;
+            --line: #cbe4f7;
+            --sky: #d9eefa;
+            --sky2: #e5f3fc;
+            --pale: #edf6fc;
+            --blue: #6baef2;
+            --pink: #ffeaf0;
+            --pinkt: #d64973;
+            --point-bg: #e2f1fa;
+            --mid: #e6f4ea;
+            --midt: #1e7e34;
+            --midb: #c3e6cb;
+            --bar1: #aed8f5;
+            --bar2: #c9e6fa;
+            box-sizing: border-box;
+        }
+
+        :root[data-theme="pink"] {
+            --navy: #4a1525;
+            --ink: #5d1a2f;
+            --h: #851e3e;
+            --soft: #9c5c70;
+            --card: #fdf4f7;
+            --line: #f7cbda;
+            --sky: #fadce6;
+            --sky2: #fce5ec;
+            --pale: #fcf1f5;
+            --blue: #f28bb0;
+            --point-bg: #fae1e8;
+            --bar1: #f7a8c3;
+            --bar2: #fcd2e0;
+        }
+
+        :root[data-theme="green"] {
+            --navy: #0a401a;
+            --ink: #1a5d2b;
+            --h: #1e8538;
+            --soft: #5c9c6f;
+            --card: #f4fdf6;
+            --line: #cbf7d2;
+            --sky: #dcfade;
+            --sky2: #e5fce7;
+            --pale: #f1fcf3;
+            --blue: #6bf28b;
+            --point-bg: #e1fae5;
+            --bar1: #95f5ad;
+            --bar2: #c5fade;
+        }
+
+        :root[data-theme="dark"] {
+            --navy: #f8fafc;
+            --ink: #e2e8f0;
+            --h: #cbd5e1;
+            --soft: #94a3b8;
+            --bg: #0f172a;
+            --card: #1e293b;
+            --line: #334155;
+            --sky: #334155;
+            --sky2: #1e293b;
+            --pale: #0f172a;
+            --blue: #3b82f6;
+            --point-bg: #334155;
+            --pink: #702459;
+            --pinkt: #fbb6ce;
+            --mid: #064e3b;
+            --midt: #6ee7b7;
+            --midb: #047857;
+            --bar1: #2563eb;
+            --bar2: #3b82f6;
+        }
+
+        :root[data-theme="navy"] {
+            --navy: #04345a;
+            --ink: #102a42;
+            --h: #2b5578;
+            --soft: #7e9cb3;
+            --card: #f5f8fa;
+            --line: #c5d6e3;
+            --sky: #dce7f0;
+            --sky2: #e8f0f5;
+            --pale: #f0f5f9;
+            --blue: #7e9cb3;
+            --point-bg: #e6eef5;
+            --pink: #ffe6ec;
+            --pinkt: #c94b6f;
+            --bar1: #7e9cb3;
+            --bar2: #9fbccc;
+        }
+
+        :root[data-theme="purple-yellow"] {
+            --navy: #432b63;
+            --ink: #533975;
+            --h: #7d5eab;
+            --soft: #a18abf;
+            --card: #fbfafc;
+            --line: #e6dff0;
+            --sky: #ede6f5;
+            --sky2: #f4f0f7;
+            --pale: #f8f6fa;
+            --blue: #dcbc2e;
+            --point-bg: #fcf8e3;
+            --bar1: #dcbc2e;
+            --bar2: #eed45e;
+        }
+
+        :root[data-theme="purple"] {
+            --navy: #f8fafc;
+            --ink: #f1f5f9;
+            --h: #c4b5fd;
+            --soft: #a78bfa;
+            --bg: #2b1845;
+            --card: #371f59;
+            --line: #5b3e8c;
+            --sky: #4c1d95;
+            --sky2: #4a2b73;
+            --pale: #371f59;
+            --blue: #a78bfa;
+            --point-bg: #43256e;
+            --pink: #702459;
+            --pinkt: #f472b6;
+            --bar1: #8b5cf6;
+            --bar2: #c4b5fd;
+        }
+
+        :root[data-theme="darkred-yellow"] {
+            --navy: #6e1c1c;
+            --ink: #852222;
+            --h: #a83030;
+            --soft: #cc6c6c;
+            --card: #fdfaf5;
+            --line: #f2e2df;
+            --sky: #faeaea;
+            --sky2: #fcf2f2;
+            --pale: #fdf5f5;
+            --blue: #d4af37;
+            --point-bg: #fdf6df;
+            --pink: #fae3f0;
+            --pinkt: #bd3573;
+            --bar1: #d4af37;
+            --bar2: #e8ca64;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px 20px;
+            background-color: #f0f4f8;
+            font-family: "Apple SD Gothic Neo", sans-serif;
+        }
+
+        .layout-container {
+            display: flex;
+            gap: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        /* 컨트롤 패널 기본 */
+        .controls-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .ctrl-box {
+            background: #fff;
+            padding: 18px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            border: 1px solid #e1e8ed;
+        }
+
+        .ctrl-box h3 {
+            margin: 0 0 12px;
+            font-size: 15px;
+            color: #1a252f;
+            border-bottom: 2px solid #edf2f7;
+            padding-bottom: 8px;
+        }
+
+        .save-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .save-btns button {
+            background: #3b82f6;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .save-btns button:hover {
+            background: #2563eb;
+        }
+
+        .save-btns button.html-btn {
+            background: #475569;
+        }
+
+        .save-btns button.export-btn {
+            background: #10b981;
+        }
+
+        .save-btns button.copy-btn {
+            background: #8b5cf6;
+        }
+
+        .save-btns button.reset-btn {
+            background: #ef4444;
+            margin-top: 8px;
+        }
+
+        .save-btns button.reset-btn:hover {
+            background: #dc2626;
+        }
+
+        .format-btns {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .format-btns button {
+            background: #f8f9fa;
+            border: 1px solid #d1d9e0;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+            color: #333;
+        }
+
+        .format-btns button:hover {
+            background: #e2e8f0;
+        }
+
+        .order-btns {
+            display: inline-flex;
+            gap: 2px;
+            margin-right: 6px;
+        }
+
+        .order-btns button {
+            background: #e2e8f0;
+            border: none;
+            border-radius: 4px;
+            padding: 2px 4px;
+            font-size: 8px;
+            cursor: pointer;
+            color: #475569;
+            transition: background 0.2s;
+        }
+
+        .order-btns button:hover {
+            background: #cbd5e1;
+        }
+
+        .drag-h {
+            cursor: grab;
+            margin-right: 6px;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        details.ctrl-section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            overflow: hidden;
+            transition: background 0.3s;
+        }
+
+        details.ctrl-section summary {
+            font-size: 13.5px;
+            font-weight: bold;
+            color: #1a252f;
+            padding: 10px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            list-style: none;
+        }
+
+        details.ctrl-section summary::-webkit-details-marker {
+            display: none;
+        }
+
+        details.ctrl-section[open] summary {
+            border-bottom: 1px solid #e2e8f0;
+            background: #f1f5f9;
+        }
+
+        .ctrl-content {
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        input[type="text"],
+        textarea,
+        input[type="number"],
+        input[type="range"],
+        input[type="date"] {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 12px;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus {
+            border-color: #3b82f6;
+        }
+
+        input[type="range"] {
+            padding: 0;
+            border: none;
+            cursor: pointer;
+        }
+
+        .row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .add-btn {
+            background: #e2e8f0;
+            color: #475569;
+            border: none;
+            padding: 6px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 4px;
+            flex: 1;
+            transition: background 0.2s;
+        }
+
+        .add-btn:hover {
+            background: #cbd5e1;
+        }
+
+        .del-btn {
+            background: #fee2e2;
+            color: #ef4444;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .color-btn {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        /* 텍스트 애니메이션 이펙트 */
+        .glitch {
+            position: relative;
+            display: inline-block;
+            animation: glitch-anim 1.5s infinite;
+            color: inherit;
+        }
+
+        @keyframes glitch-anim {
+
+            0%,
+            90% {
+                transform: skew(0deg);
+                text-shadow: none;
+            }
+
+            92% {
+                transform: skew(-2deg);
+                text-shadow: 1px 0 var(--pinkt), -1px 0 var(--blue);
+            }
+
+            95% {
+                transform: skew(2deg);
+                text-shadow: -1px 0 var(--pinkt), 1px 0 var(--blue);
+            }
+
+            98% {
+                transform: skew(0deg);
+                text-shadow: none;
+            }
+
+            100% {
+                transform: skew(1deg);
+                text-shadow: 1px 0 var(--pinkt), 0 0 var(--blue);
+            }
+        }
+
+        .typing {
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 2px solid currentColor;
+            width: max-content;
+            max-width: 0;
+            animation: typing 1.8s steps(30, end) forwards, blink-caret 0.8s step-end infinite;
+            vertical-align: bottom;
+        }
+
+        @keyframes typing {
+            from {
+                max-width: 0;
+            }
+
+            to {
+                max-width: 100%;
+            }
+        }
+
+        @keyframes blink-caret {
+
+            from,
+            to {
+                border-color: transparent;
+            }
+
+            50% {
+                border-color: currentColor;
+            }
+        }
+
+        .blind {
+            background-color: var(--ink);
+            color: var(--ink);
+            border-radius: 3px;
+            transition: all 0.3s;
+            user-select: none;
+        }
+
+        .blind:hover {
+            background-color: transparent;
+            color: inherit;
+        }
+
+        .shake {
+            display: inline-block;
+            animation: shk .4s infinite;
+        }
+
+        @keyframes shk {
+
+            0%,
+            100% {
+                transform: translateX(0)
+            }
+
+            25% {
+                transform: translateX(-1px) rotate(-1deg)
+            }
+
+            75% {
+                transform: translateX(1px) rotate(1deg)
+            }
+        }
+
+        .hl {
+            background: linear-gradient(transparent 55%, #fff176 55%);
+            color: #222;
+        }
+
+        .neon {
+            text-shadow: 0 0 4px currentColor, 0 0 10px var(--blue);
+        }
+
+        .sparkle {
+            animation: spk 1.4s infinite;
+        }
+
+        @keyframes spk {
+
+            0%,
+            100% {
+                opacity: 1;
+                text-shadow: 0 0 0 transparent
+            }
+
+            50% {
+                opacity: .8;
+                text-shadow: 0 0 6px #ffd54f, 0 0 12px #ffd54f
+            }
+        }
+
+        /* 프리뷰 영역 */
+        .preview-area {
+            flex: 0 0 380px;
+            background: var(--bg);
+            padding: 16px 12px 16px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            color: var(--ink);
+            position: sticky;
+            top: 20px;
+            transition: background 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .layout-container {
+                flex-direction: column-reverse;
+                align-items: center;
+            }
+
+            .preview-area,
+            .controls-area {
+                width: 100%;
+                max-width: 380px;
+                position: static;
+            }
+        }
+
+        [contenteditable="true"] {
+            outline: none;
+            transition: background 0.2s;
+            cursor: text;
+            min-height: 1em;
+            min-width: 20px;
+            display: inline-block;
+        }
+
+        [contenteditable="true"]:focus {
+            outline: 1px dashed var(--blue);
+            background: rgba(107, 174, 242, 0.08);
+            border-radius: 4px;
+        }
+
+        [contenteditable="true"]:empty::before {
+            content: attr(data-placeholder);
+            color: #94a3b8;
+            pointer-events: none;
+            display: block;
+        }
+
+        .draggable {
+            position: relative;
+        }
+
+        /* === ☁️ 상단 헤더 & 날씨 이펙트 (수정) === */
+        header {
+            position: relative;
+            overflow: hidden;
+            border-radius: 14px;
+            padding: 10px 12px 8px;
+            border: 1.5px solid var(--line);
+            margin-bottom: 6px;
+            transition: background 0.5s ease;
+        }
+
+        header * {
+            position: relative;
+            z-index: 2;
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            width: 50px;
+            height: 14px;
+            right: 10px;
+            top: 12px;
+            background: #fff;
+            border-radius: 20px;
+            opacity: .85;
+            box-shadow: -12px 6px 0 -3px #fff, 10px 5px 0 -4px #fff;
+            pointer-events: none;
+            z-index: 1;
+            transition: opacity 0.5s;
+        }
+
+        header::after {
+            content: "";
+            position: absolute;
+            pointer-events: none;
+            z-index: 0;
+            transition: all 0.5s ease;
+        }
+
+        header.theme-day {
+            background: linear-gradient(160deg, #bce0fa 0%, #dcf0fd 65%, #f0f8ff 100%);
+        }
+
+        header.theme-day::after {
+            width: 30px;
+            height: 30px;
+            background: #ffea70;
+            border-radius: 50%;
+            right: 20px;
+            top: -5px;
+            box-shadow: 0 0 15px #ffea70;
+        }
+
+        header.theme-sunset {
+            background: linear-gradient(160deg, #ffb3a7 0%, #ffc9ba 65%, #ffe5d9 100%);
+            border-color: #ffd6cc;
+        }
+
+        header.theme-sunset::after {
+            width: 32px;
+            height: 32px;
+            background: #ff7675;
+            border-radius: 50%;
+            right: 15px;
+            top: 12px;
+            box-shadow: 0 0 20px #ff7675;
+        }
+
+        header.theme-sunset::before {
+            opacity: 0.6;
+            background: #fff2f2;
+        }
+
+        header.theme-night {
+            background: linear-gradient(160deg, #2c3e50 0%, #34495e 65%, #1a252f 100%);
+            border-color: #34495e;
+        }
+
+        header.theme-night::after {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: transparent;
+            box-shadow: inset -6px 2px 0 2px #f1c40f;
+            right: 25px;
+            top: 6px;
+        }
+
+        header.theme-night::before {
+            opacity: 0.15;
+        }
+
+        header.theme-night h1 {
+            color: #ffffff;
+        }
+
+        header.theme-night .date {
+            color: #cbd5e1;
+        }
+
+        header.theme-night .chip {
+            background: #334155;
+            color: #f8fafc;
+            border: 1px solid #475569;
+        }
+
+        /* V22 날씨 키워드 애니메이션 효과 */
+        header.w-cloud {
+            background: linear-gradient(160deg, #cfd8e3, #e4e9f0);
+        }
+
+        header.w-cloud::after {
+            background: transparent;
+            box-shadow: none;
+        }
+
+        /* 얇은 빗방울 좌측 하단 사선으로 */
+        header.w-rain {
+            background: linear-gradient(160deg, #748293, #aab6c4);
+        }
+
+        header.w-rain::after {
+            width: 200%;
+            height: 200%;
+            left: -50%;
+            top: -50%;
+            border-radius: 0;
+            box-shadow: none;
+            background-image:
+                radial-gradient(1.5px 25px ellipse at 50% 50%, rgba(255, 255, 255, 0.4) 0%, transparent 100%),
+                radial-gradient(1px 15px ellipse at 50% 50%, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
+            background-size: 40px 70px, 60px 90px;
+            background-position: 0 0, 30px 45px;
+            transform: rotate(-15deg);
+            /* 왼쪽 아래로 */
+            animation: rain-fall 0.5s linear infinite;
+        }
+
+        @keyframes rain-fall {
+            0% {
+                background-position: 0 0, 30px 45px;
+            }
+
+            100% {
+                background-position: 0 70px, 30px 135px;
+            }
+        }
+
+        /* 눈송이 밀도 덜어내고 은은하게 */
+        header.w-snow {
+            background: linear-gradient(160deg, #c9d6e6, #eaf2f8);
+        }
+
+        header.w-snow::after {
+            width: 150%;
+            height: 150%;
+            left: -25%;
+            top: -25%;
+            border-radius: 0;
+            box-shadow: none;
+            background-image:
+                radial-gradient(circle, rgba(255, 255, 255, 0.8) 1.5px, transparent 2px),
+                radial-gradient(circle, rgba(255, 255, 255, 0.6) 1px, transparent 1.5px);
+            background-size: 40px 40px, 60px 60px;
+            /* 더 넓게 흩뿌림 */
+            background-position: 0 0, 20px 30px;
+            transform: rotate(-10deg);
+            animation: snow-fall 3s linear infinite;
+        }
+
+        @keyframes snow-fall {
+            0% {
+                background-position: 0 0, 20px 30px;
+            }
+
+            100% {
+                background-position: 0 40px, 20px 90px;
+            }
+        }
+
+        header.w-storm {
+            background: linear-gradient(160deg, #3b3f5c, #5b5f7e);
+        }
+
+        header.w-storm::after {
+            width: auto;
+            height: auto;
+            background: none;
+            box-shadow: none;
+            border-radius: 0;
+            content: "⚡";
+            font-size: 26px;
+            right: 22px;
+            top: 6px;
+        }
+
+        header.w-storm h1,
+        header.w-storm .date {
+            color: #fff;
+        }
+
+        header.theme-night.w-cloud {
+            background: linear-gradient(160deg, #2f3b47, #4a5866);
+        }
+
+        header.theme-night.w-rain {
+            background: linear-gradient(160deg, #1f2a36, #3a4a5c);
+        }
+
+        header.theme-night.w-snow {
+            background: linear-gradient(160deg, #2c3e50, #516a82);
+        }
+
+        .date {
+            font-size: 11px;
+            color: var(--ink);
+            margin-bottom: 2px;
+        }
+
+        h1 {
+            margin: 0 0 4px;
+            font-size: 16px;
+            color: var(--navy);
+            display: block;
+            width: 100%;
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .chip {
+            background: #fff;
+            color: var(--navy);
+            border-radius: 12px;
+            padding: 2px 8px;
+            font-size: 11px;
+        }
+
+        /* === 본문 일반 블럭들 === */
+        .card {
+            background: var(--card);
+            border: 1.5px solid var(--line);
+            border-radius: 12px;
+            padding: 8px 10px;
+            margin-top: 6px;
+            transition: all 0.3s ease;
+        }
+
+        h2 {
+            margin: 0 0 4px;
+            font-size: 13px;
+            color: var(--h);
+            width: 100%;
+            display: block;
+        }
+
+        .love {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .love b {
+            font-weight: 400;
+            font-size: 15px;
+            color: var(--pinkt);
+        }
+
+        .bar {
+            flex: 1;
+            height: 8px;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            margin: 0;
+        }
+
+        .bar i {
+            display: block;
+            height: 100%;
+            width: 0%;
+            border-radius: 8px;
+            background: repeating-linear-gradient(135deg, var(--bar1) 0 6px, var(--bar2) 6px 12px);
+            transition: width 0.3s ease-out;
+        }
+
+        .muted {
+            color: var(--soft);
+            font-size: 11px;
+            margin-top: 4px;
+            display: block;
+            width: 100%;
+        }
+
+        /* 📆 디데이 (D-Day) 블럭 전용 스타일 (테마 연동) */
+        .dd-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 6px;
+            margin: 3px 0;
+            font-size: 11.5px;
+        }
+
+        .dd-badge {
+            background: var(--point-bg);
+            border: 1px solid var(--line);
+            color: var(--h);
+            border-radius: 8px;
+            padding: 2px 8px;
+            font-size: 11.5px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        /* 🕰️ 타임라인 (Timeline) 블럭 전용 스타일 */
+        .tl-row {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            font-size: 11.5px;
+            padding: 3px 0;
+        }
+
+        .tl-time {
+            min-width: 48px;
+            text-align: right;
+            color: var(--soft);
+            font-size: 10.5px;
+        }
+
+        .tl-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--blue);
+            margin-top: 4px;
+            flex: none;
+            position: relative;
+        }
+
+        .tl-row:not(:last-child) .tl-dot::after {
+            content: "";
+            position: absolute;
+            left: 3px;
+            top: 10px;
+            width: 2px;
+            height: calc(100% + 14px);
+            background: var(--line);
+        }
+
+        .quote {
+            margin: 0;
+            background: var(--bg);
+            border-radius: 10px;
+            padding: 5px 8px;
+            font-size: 11.5px;
+            display: block;
+            width: 100%;
+            border: 1px solid var(--line);
+        }
+
+        .quote+.quote,
+        .quote+.q {
+            margin-top: 4px;
+        }
+
+        .face {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            margin-bottom: 4px;
+        }
+
+        .face span {
+            background: var(--sky2);
+            border-radius: 10px;
+            padding: 2px 8px;
+            font-size: 11px;
+            border: 1px solid var(--line);
+        }
+
+        .q {
+            background: var(--point-bg);
+            border-radius: 10px;
+            padding: 5px 8px;
+            font-size: 11.5px;
+            border: 1px solid var(--line);
+            display: block;
+        }
+
+        .q em {
+            display: block;
+            font-style: normal;
+            color: var(--soft);
+            font-size: 10.5px;
+            margin-bottom: 2px;
+        }
+
+        .inv-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 2px 0;
+        }
+
+        .inv-item {
+            background: var(--bg);
+            border: 1px dashed var(--soft);
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 11px;
+            color: var(--ink);
+            display: inline-block;
+            transition: all 0.2s;
+        }
+
+        .pages {
+            background: repeating-linear-gradient(var(--card), var(--card) 19px, var(--line) 20px);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 4px 8px;
+            line-height: 20px;
+            font-size: 11.5px;
+        }
+
+        .note-line {
+            display: block;
+            width: 100%;
+            min-height: 20px;
+        }
+
+        .note-desc {
+            display: block;
+            width: 100%;
+            font-size: 10.5px;
+            color: var(--soft);
+            margin-top: 2px;
+            line-height: 1.4;
+            font-style: normal;
+        }
+
+        .bgm-player {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            background: var(--sky2);
+            border-radius: 12px;
+            margin-bottom: 8px;
+            border: 1px solid var(--line);
+            position: relative;
+        }
+
+        .bgm-icon {
+            font-size: 24px;
+            background: #fff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .bgm-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            width: 100%;
+        }
+
+        .bgm-title {
+            font-size: 15px;
+            color: var(--navy);
+            display: block;
+            width: 100%;
+        }
+
+        .bgm-artist {
+            font-size: 11px;
+            color: var(--soft);
+            display: block;
+            width: 100%;
+        }
+
+        .bgm-lyrics {
+            font-size: 11px;
+            line-height: 1.6;
+            color: var(--soft);
+            padding: 8px;
+            text-align: center;
+            font-style: italic;
+            background: var(--bg);
+            border-radius: 10px;
+            border: 1px dashed var(--line);
+            display: block;
+            width: 100%;
+        }
+
+        ul,
+        ol {
+            margin: 0;
+            padding-left: 16px;
+        }
+
+        li {
+            margin: 1px 0;
+            font-size: 11.5px;
+        }
+
+        li::marker {
+            color: var(--blue);
+        }
+
+        .tag {
+            display: inline-block;
+            font-size: 9.5px;
+            line-height: 1.3;
+            padding: 2px 6px;
+            border-radius: 8px;
+            margin-left: 4px;
+            background: var(--bg);
+            border: 1px solid var(--line);
+            color: var(--h);
+            vertical-align: middle;
+            cursor: text;
+            transition: all 0.2s;
+        }
+
+        .tag.plan {
+            background: var(--pink);
+            border-color: var(--pinkt);
+            color: var(--pinkt);
+        }
+
+        .tag.mid {
+            background: var(--mid);
+            border-color: var(--midb);
+            color: var(--midt);
+        }
+
+        .two {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+        }
+
+        .two>div {
+            background: var(--bg);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 4px 8px;
+            font-size: 11.5px;
+        }
+
+        .two h3 {
+            margin: 0 0 2px;
+            font-size: 12px;
+            color: var(--h);
+            display: block;
+            width: 100%;
+        }
+
+        .goal {
+            background: var(--bg);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 5px 8px;
+            margin-top: 4px;
+        }
+
+        .goal h3 {
+            margin: 0 0 2px;
+            font-size: 12px;
+            display: inline-block;
+        }
+
+        .goal p {
+            margin: 0;
+            font-size: 11px;
+            color: var(--soft);
+            display: block;
+            width: 100%;
+        }
+
+        .tmi {
+            margin-top: 6px;
+            text-align: center;
+            font-size: 11px;
+            background: var(--point-bg);
+            border-radius: 12px;
+            padding: 5px 10px;
+            color: var(--ink);
+            border: 1px solid var(--line);
+            display: block;
+        }
+
+        /* === 🖼️ 이미지 블럭 === */
+        .img-block-wrapper {
+            margin-top: 6px;
+            transition: all 0.3s;
+        }
+
+        .img-crop {
+            overflow: hidden;
+            width: 100%;
+            max-height: 350px;
+            position: relative;
+            background: rgba(0, 0, 0, 0.03);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: inherit;
+        }
+
+        .img-crop img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            transform-origin: center;
+            pointer-events: none;
+        }
+
+        .frame-basic {
+            border-radius: 12px;
+            border: 1.5px solid var(--line);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .frame-basic .img-crop {
+            border-radius: 10px;
+        }
+
+        .frame-basic .img-caption {
+            display: none;
+        }
+
+        .frame-polaroid {
+            background: #fff;
+            padding: 12px 12px 16px 12px;
+            border-radius: 4px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e1e8ed;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .frame-polaroid .img-crop {
+            border-radius: 2px;
+        }
+
+        .frame-polaroid .img-caption {
+            display: block;
+            text-align: center;
+            margin-top: 12px;
+            font-family: 'Jua', sans-serif;
+            font-size: 14px;
+            color: #444;
+            width: 100%;
+        }
+
+        .frame-scrap {
+            position: relative;
+            padding: 10px;
+            background: var(--bg);
+            border: 1px dashed var(--soft);
+            border-radius: 2px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .frame-scrap .tape {
+            display: block !important;
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-2deg);
+            width: 80px;
+            height: 26px;
+            background: rgba(255, 235, 153, 0.85);
+            z-index: 10;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .frame-scrap .img-crop {
+            border-radius: 2px;
+        }
+
+        .frame-scrap .img-caption {
+            display: none;
+        }
+
+        .frame-film {
+            background: #111;
+            padding: 24px 12px;
+            border-radius: 2px;
+            position: relative;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .frame-film::before,
+        .frame-film::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background-image: repeating-linear-gradient(90deg, transparent 0, transparent 6px, rgba(255, 255, 255, 0.2) 6px, rgba(255, 255, 255, 0.2) 12px);
+        }
+
+        .frame-film::before {
+            top: 6px;
+        }
+
+        .frame-film::after {
+            bottom: 6px;
+        }
+
+        .frame-film .img-crop {
+            border-radius: 2px;
+            border: 1px solid #000;
+        }
+
+        .frame-film .img-caption {
+            display: block;
+            text-align: right;
+            margin-top: 10px;
+            color: #ff9800;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 14px;
+            text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.8);
+            z-index: 5;
+            letter-spacing: 1px;
+            padding-right: 4px;
+            min-height: 1em;
+        }
+
+        /* === 📱 단말기 블럭 === */
+        .dev-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding: 4px 2px;
+            transition: background 0.3s;
+        }
+
+        .dev-item {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .lock-header {
+            display: none;
+            text-align: center;
+            margin-bottom: 20px;
+            padding-top: 12px;
+        }
+
+        .lock-time {
+            font-size: 52px;
+            font-weight: 300;
+            font-family: "Apple SD Gothic Neo", sans-serif;
+            color: #fff;
+            text-shadow: 0 1px 8px rgba(0, 0, 0, 0.15);
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .lock-date {
+            font-size: 14px;
+            color: #fff;
+            font-weight: 500;
+            opacity: 0.95;
+            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .dev-theme-kakao {
+            background: #b2c7d9;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .dev-theme-kakao .dev-item {
+            padding: 8px 12px;
+            max-width: 75%;
+            font-size: 11.5px;
+            border-radius: 14px;
+            margin-bottom: 4px;
+            color: #111;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .dev-theme-kakao .dev-item.left {
+            background: #ffffff;
+            border-top-left-radius: 4px;
+            margin-right: auto;
+        }
+
+        .dev-theme-kakao .dev-item.right {
+            background: #fee500;
+            border-top-right-radius: 4px;
+            margin-left: auto;
+        }
+
+        .dev-theme-kakao .dev-name {
+            font-weight: bold;
+            font-size: 10px;
+            margin-bottom: 3px;
+            color: #666;
+        }
+
+        .dev-theme-kakao .dev-item.right .dev-name {
+            display: none;
+        }
+
+        .dev-theme-imessage {
+            background: transparent;
+            padding: 8px 4px;
+        }
+
+        .dev-theme-imessage .dev-item {
+            padding: 8px 14px;
+            max-width: 75%;
+            font-size: 12px;
+            border-radius: 18px;
+            margin-bottom: 4px;
+        }
+
+        .dev-theme-imessage .dev-item.left {
+            background: #e5e5ea;
+            color: #000;
+            border-bottom-left-radius: 4px;
+            margin-right: auto;
+        }
+
+        .dev-theme-imessage .dev-item.right {
+            background: #007aff;
+            color: #fff;
+            border-bottom-right-radius: 4px;
+            margin-left: auto;
+        }
+
+        .dev-theme-imessage .dev-name {
+            font-weight: bold;
+            font-size: 9px;
+            margin-bottom: 3px;
+            opacity: 0.6;
+            text-transform: uppercase;
+            padding-left: 2px;
+        }
+
+        .dev-theme-imessage .dev-item.right .dev-name {
+            display: none;
+        }
+
+        .dev-theme-lockscreen {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 16px 16px 24px;
+            border-radius: 20px;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .dev-theme-lockscreen .lock-header {
+            display: block;
+        }
+
+        .dev-theme-lockscreen .dev-item {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-radius: 16px;
+            padding: 12px 14px;
+            margin-bottom: 8px;
+            width: 100%;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .dev-theme-lockscreen .dev-name {
+            font-weight: bold;
+            font-size: 11.5px;
+            margin-bottom: 4px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            opacity: 0.95;
+        }
+
+        .dev-theme-lockscreen .dev-item::before {
+            content: "지금";
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            font-size: 10px;
+            color: #fff;
+            opacity: 0.7;
+        }
+
+        .dev-theme-lockscreen .dev-text {
+            font-size: 12.5px;
+            line-height: 1.4;
+            color: #f1f5f9;
+        }
+
+        .dev-theme-terminal {
+            background: #050505;
+            border: 1px solid var(--blue);
+            padding: 16px;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .dev-theme-terminal .dev-item {
+            width: 100%;
+            border-bottom: 1px dashed var(--blue);
+            padding-bottom: 8px;
+            margin-bottom: 8px;
+            opacity: 0.85;
+        }
+
+        .dev-theme-terminal .dev-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .dev-theme-terminal .dev-name {
+            font-family: "NeoDunggeunmo", monospace;
+            color: var(--blue);
+            font-size: 11px;
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 4px var(--blue);
+        }
+
+        .dev-theme-terminal .dev-name::before {
+            content: "> SYSTEM_LOG: ";
+            opacity: 0.7;
+        }
+
+        .dev-theme-terminal .dev-text {
+            font-family: "NeoDunggeunmo", monospace;
+            color: var(--blue);
+            font-size: 12px;
+            line-height: 1.5;
+            text-shadow: 0 0 4px var(--blue);
+        }
+
+        /* 블럭 스킨(외형) 테마 */
+        #capture-area[data-skin="window"] .card,
+        #capture-area[data-skin="window"] .tmi,
+        #capture-area[data-skin="window"] .tl-row {
+            background: #c0c0c0;
+            border: 2px solid;
+            border-color: #fff #808080 #808080 #fff;
+            border-radius: 0;
+            color: #000;
+            box-shadow: none;
+        }
+
+        #capture-area[data-skin="window"] .inv-item,
+        #capture-area[data-skin="window"] .dd-row {
+            background: #fff;
+            border: 2px solid;
+            border-color: #808080 #fff #fff #808080;
+            border-radius: 0;
+            color: #000;
+        }
+
+        #capture-area[data-skin="window"] .quote,
+        #capture-area[data-skin="window"] .q,
+        #capture-area[data-skin="window"] .two>div {
+            background: #fff;
+            border: 2px solid;
+            border-color: #808080 #fff #fff #808080;
+            border-radius: 0;
+            color: #000;
+        }
+
+        #capture-area[data-skin="window"] header {
+            background: linear-gradient(90deg, #000080, #1084d0);
+            border: 2px solid;
+            border-color: #fff #808080 #808080 #fff;
+            border-radius: 0;
+        }
+
+        #capture-area[data-skin="window"] header h1,
+        #capture-area[data-skin="window"] header .date {
+            color: #fff;
+        }
+
+        #capture-area[data-skin="window"] header::before,
+        #capture-area[data-skin="window"] header::after {
+            display: none;
+        }
+
+        #capture-area[data-skin="window"] h2 {
+            color: #000080;
+            border-bottom: 1px solid #808080;
+            padding-bottom: 2px;
+        }
+
+        #capture-area[data-skin="diary"] .card,
+        #capture-area[data-skin="diary"] .tmi {
+            background: #fffdf8;
+            border: 1px solid #e0d8c8;
+            border-radius: 2px;
+            position: relative;
+        }
+
+        #capture-area[data-skin="diary"] .card::before,
+        #capture-area[data-skin="diary"] .tmi::before {
+            content: "";
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 16px;
+            background: rgba(255, 235, 153, 0.7);
+            z-index: 10;
+        }
+
+        #capture-area[data-skin="diary"] .inv-item {
+            background: rgba(255, 235, 153, 0.3);
+            border: 1px solid rgba(255, 235, 153, 0.8);
+            border-radius: 2px;
+        }
+
+        #capture-area[data-skin="diary"] h2 {
+            color: #a67c52;
+        }
+
+        #capture-area[data-skin="terminal"] {
+            background: #000;
+        }
+
+        #capture-area[data-skin="terminal"] .card,
+        #capture-area[data-skin="terminal"] .tmi,
+        #capture-area[data-skin="terminal"] header {
+            background: #000;
+            border: 1px dashed var(--blue);
+            color: var(--blue);
+            border-radius: 0;
+        }
+
+        #capture-area[data-skin="terminal"] h1,
+        #capture-area[data-skin="terminal"] h2,
+        #capture-area[data-skin="terminal"] h3,
+        #capture-area[data-skin="terminal"] .main-text,
+        #capture-area[data-skin="terminal"] .muted,
+        #capture-area[data-skin="terminal"] .bgm-title {
+            color: var(--blue);
+        }
+
+        #capture-area[data-skin="terminal"] h2::before {
+            content: '>> ';
+        }
+
+        #capture-area[data-skin="terminal"] .quote,
+        #capture-area[data-skin="terminal"] .q,
+        #capture-area[data-skin="terminal"] .inv-item,
+        #capture-area[data-skin="terminal"] .two>div,
+        #capture-area[data-skin="terminal"] .bgm-player {
+            background: transparent;
+            border: 1px dotted var(--blue);
+            color: var(--blue);
+            border-radius: 0;
+        }
+
+        #capture-area[data-skin="terminal"] .bgm-icon {
+            background: var(--blue);
+            color: #000;
+        }
+
+        #capture-area[data-skin="terminal"] header::before,
+        #capture-area[data-skin="terminal"] header::after {
+            display: none;
+        }
+
+        #capture-area[data-skin="terminal"] .dev-item {
+            border-radius: 0 !important;
+            border: 1px solid var(--blue) !important;
+            background: transparent !important;
+            color: var(--blue) !important;
+            box-shadow: none !important;
+        }
+
+        #capture-area[data-skin="terminal"] .dev-theme-kakao .dev-item.right,
+        #capture-area[data-skin="terminal"] .dev-theme-imessage .dev-item.right {
+            border-style: dashed !important;
+        }
+
+        #capture-area[data-skin="terminal"] .dev-theme-lockscreen {
+            background: #000;
+            box-shadow: none;
+        }
+
+        #capture-area[data-skin="terminal"] .lock-time,
+        #capture-area[data-skin="terminal"] .lock-date {
+            color: var(--blue);
+            text-shadow: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout-container">
+
+        <!-- === 컨트롤 패널 === -->
+        <div class="controls-area">
+
+            <!-- 1. 테마 & 스킨 설정 박스 -->
+            <div class="ctrl-box">
+                <h3>🎨 테마/스킨/폰트 변경</h3>
+
+                <label style="font-size:11px; color:var(--soft); font-weight:bold;">1. 폰트(글꼴) 선택</label>
+                <div class="format-btns" style="margin-bottom:12px; margin-top:4px;">
+                    <button onclick="changeFont('gothic')">기본 고딕</button>
+                    <button onclick="changeFont('myeongjo')">명조체</button>
+                    <button onclick="changeFont('batang')">고운바탕</button>
+                    <button onclick="changeFont('ridi')">리디바탕</button>
+                    <button onclick="changeFont('pixel')">레트로 픽셀</button>
+                    <button onclick="changeFont('galmuri')">갈무리</button>
+                    <button onclick="changeFont('paperlogy')">페이퍼로지</button>
+                    <button onclick="changeFont('orbitron')">오비트론</button>
+                    <button onclick="changeFont('ibm')">IBM PLEX</button>
+                </div>
+
+                <label style="font-size:11px; color:var(--soft); font-weight:bold;">2. 내부 색상 테마</label>
+                <div class="format-btns" style="margin-bottom:8px; margin-top:4px;">
+                    <button onclick="changeTheme('default')">💧 블루</button>
+                    <button onclick="changeTheme('pink')">🌸 블라썸</button>
+                    <button onclick="changeTheme('green')">🌿 메론</button>
+                    <button onclick="changeTheme('dark')">🌙 미드나잇</button>
+                    <button onclick="changeTheme('navy')">🌌 네이비</button>
+                    <button onclick="changeTheme('purple-yellow')">⭐ 보라노랑</button>
+                    <button onclick="changeTheme('purple')">🔮 딥 퍼플</button>
+                    <button onclick="changeTheme('darkred-yellow')">🍷 빨강노랑</button>
+                </div>
+
+                <div class="row" style="margin-bottom:12px; background:#f8fafc; padding:8px; border-radius:6px; border:1px solid #e2e8f0; align-items:center;">
+                    <span style="font-size:11px; font-weight:bold; color:var(--soft); flex:1;">🖌️ 직접 지정 (커스텀 틴트)</span>
+                    <label style="font-size:10px; display:flex; align-items:center; gap:4px;">
+                        포인트 <input type="color" id="custom-main-color" value="#3b82f6" onchange="applyCustomColors()" style="width:24px; height:24px; padding:0;">
+                    </label>
+                    <label style="font-size:10px; display:flex; align-items:center; gap:4px;">
+                        배경 <input type="color" id="custom-bg-color" value="#ffffff" onchange="applyCustomColors()" style="width:24px; height:24px; padding:0;">
+                    </label>
+                </div>
+
+                <label style="font-size:11px; color:var(--soft); font-weight:bold;">3. 블럭 외형(스킨) 선택</label>
+                <div class="format-btns" style="margin-top:4px;">
+                    <button onclick="changeSkin('default')">기본 둥글게</button>
+                    <button onclick="changeSkin('window')">🔲 윈도우</button>
+                    <button onclick="changeSkin('diary')">📝 다이어리</button>
+                    <button onclick="changeSkin('terminal')">💻 터미널 (해커)</button>
+                </div>
+            </div>
+
+            <!-- 2. 글 꾸미기 박스 -->
+            <div class="ctrl-box">
+                <h3>🪄 글자 꾸미기 & 애니메이션</h3>
+                <p style="font-size:11px; color:#64748b; margin:-4px 0 8px;">원하는 글자를 드래그(블록)한 뒤 버튼을 누르세요.</p>
+                <div class="format-btns">
+                    <button onmousedown="event.preventDefault(); document.execCommand('undo', false, null);" title="되돌리기">↩️</button>
+                    <button onmousedown="event.preventDefault(); document.execCommand('redo', false, null);" title="다시실행">↪️</button>
+                    <div style="width:1px; height:20px; background:#d1d9e0; margin:0 4px;"></div>
+
+                    <button onmousedown="event.preventDefault(); document.execCommand('bold', false, null);" title="굵게"><b>B</b></button>
+                    <button onmousedown="event.preventDefault(); document.execCommand('italic', false, null);" title="기울임"><i>I</i></button>
+                    <button onmousedown="event.preventDefault(); document.execCommand('underline', false, null);" title="밑줄"><u>U</u></button>
+                    <button onmousedown="event.preventDefault(); document.execCommand('strikeThrough', false, null);" title="취소선"><s>S</s></button>
+                    <input type="color" id="text-color-picker" title="글자 색상 변경" value="#0a2540" style="width:30px; height:30px; padding:0; border:1px solid #d1d9e0; border-radius:6px; cursor:pointer; background:#fff;" onchange="document.execCommand('foreColor', false, this.value);">
+                    <button onmousedown="event.preventDefault(); document.execCommand('removeFormat', false, null);" title="서식 지우기">지우기</button>
+
+                    <div style="width:100%; height:4px;"></div>
+
+                    <button onmousedown="event.preventDefault(); applyEffect('glitch');" title="글자가 은은하게 지직거립니다.">⚡ 글리치</button>
+                    <button onmousedown="event.preventDefault(); applyEffect('typing');" title="글자가 타이핑됩니다.">⌨️ 타이핑</button>
+                    <button onmousedown="event.preventDefault(); applyEffect('blind');" title="글자를 까맣게 가립니다." style="background:#1e293b; color:#fff; border-color:#0f172a;">⬛ 검열</button>
+                    <button onmousedown="event.preventDefault(); applyEffect('shake');">📳 흔들림</button>
+                    <button onmousedown="event.preventDefault(); applyEffect('hl');">🖍️ 형광펜</button>
+                    <button onmousedown="event.preventDefault(); applyEffect('neon');">💡 네온</button>
+                    <button onmousedown="event.preventDefault(); applyEffect('sparkle');">✨ 반짝</button>
+                </div>
+            </div>
+
+            <!-- 3. 블럭 통합 편집 -->
+            <div class="ctrl-box">
+                <h3>⚙️ 블럭 편집 (켜기/끄기 및 순서)</h3>
+                <p style="font-size:11px; color:#64748b; margin:-4px 0 8px;">블럭 앞의 ⠿(점여섯개)를 잡아 끌면 순서를 바꿀 수 있습니다.</p>
+
+                <div class="row" style="margin-bottom:6px;">
+                    <button class="add-btn" style="margin-top:0;" onclick="toggleAllBlocks(true)">✅ 모두 켜기</button>
+                    <button class="add-btn" style="margin-top:0;" onclick="toggleAllBlocks(false)">❌ 모두 끄기</button>
+                </div>
+                <div class="row" style="margin-bottom:12px;">
+                    <button class="add-btn" style="margin-top:0; background:#f1f5f9;" onclick="toggleAllPanels(true)">📂 패널 모두 펼치기</button>
+                    <button class="add-btn" style="margin-top:0; background:#f1f5f9;" onclick="toggleAllPanels(false)">📁 패널 모두 접기</button>
+                </div>
+
+                <!-- 드래그 앤 드롭 영역 래퍼 -->
+                <div id="sortable-wrapper">
+
+                    <div class="ctrl-wrap" id="ctrl-wrap-header">
+                        <details class="ctrl-section">
+                            <summary>
+                                <span class="drag-h" title="드래그로 순서 변경">⠿</span>
+                                <input type="checkbox" class="block-toggle-cb" value="block-header" checked onchange="toggleBlock('block-header', this)"> ☁️ 상단 헤더 (날씨 연동)
+                            </summary>
+                            <div class="ctrl-content">
+                                <label style="font-size:10px; color:#64748b; font-weight:bold;">💡 날씨 칸에 눈, 비, 흐림, 번개 등을 적으면 배경 애니메이션 효과가 생깁니다!</label>
+                                <input type="text" id="ctrl-date" placeholder="날짜 (예: 26.04.12. 화요일)">
+                                <input type="text" id="ctrl-title" placeholder="장소나 제목">
+                                <div class="row">
+                                    <input type="text" id="ctrl-time" placeholder="시간 (예: PM 11:58)">
+                                    <input type="text" id="ctrl-weather" placeholder="날씨 입력 (예: 비, 눈, 맑음)">
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="ctrl-wrap" id="ctrl-wrap-love">
+                        <details class="ctrl-section">
+                            <summary>
+                                <span class="drag-h" title="드래그로 순서 변경">⠿</span>
+                                <input type="checkbox" class="block-toggle-cb" value="block-love" checked onchange="toggleBlock('block-love', this)"> 💕 호감도
+                            </summary>
+                            <div class="ctrl-content">
+                                <div class="row">
+                                    <input type="number" id="ctrl-love-val" placeholder="수치 (0~100)" style="width:80px;">
+                                    <input type="text" id="ctrl-love-desc" placeholder="상태 설명">
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 📆 D-Day 블럭 (모드 스위치 추가) -->
+                    <div class="ctrl-wrap" id="ctrl-wrap-dday">
+                        <details class="ctrl-section">
+                            <summary>
+                                <span class="drag-h" title="드래그로 순서 변경">⠿</span>
+                                <input type="checkbox" class="block-toggle-cb" value="block-dday" checked onchange="toggleBlock('block-dday', this)"> 📅 D-Day (기념일)
+                            </summary>
+                            <div class="ctrl-content">
+                                <input type="text" id="ctrl-dday-title" placeholder="제목" value="📅 D-day">
+                                <div id="ctrl-dday-container"></div>
+                                <button class="add-btn" style="width:100%" onclick="addDday()">+ D-Day 추가</button>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="ctrl-wrap" id="ctrl-wrap-image">
+                        <details class="ctrl-section">
+                            <summary>
+                                <span class="drag-h" title="드래그로 순서 변경">⠿</span>
+                                <input type="checkbox" class="block-toggle-cb" value="block-image" checked onchange="toggleBlock('block-image', this)"> 🖼️ 이미지 (사진)
+                            </summary>
+                            <div class="ctrl-content">
+                                <label style="font-size:11px; color:var(--soft); font-weight:bold;">1. 이미지 첨부 및 삭제</label>
+                                <div class="row" style="margin-bottom:6px;">
+                                    <input type="file" id="ctrl-img-upload" accept="image/*" onchange="handleImageUpload(event)" style="font-size:11px; padding:4px; flex:1;">
+                                    <button class="del-btn" style="flex:0 0 60px; font-size:11px; padding:4px;" onclick="clearImage()">삭제</button>
+                                </div>
+
+                                <label style="font-size:11px; color:var(--soft); font-weight:bold; margin-top:6px;">2. 이미지 테마(액자)</label>
+                                <div class="format-btns">
+                                    <button onclick="changeImageTheme('basic')">기본 둥글게</button>
+                                    <button onclick="changeImageTheme('polaroid')">폴라로이드</button>
+                                    <button onclick="changeImageTheme('scrap')">마스킹테이프</button>
+                                    <button onclick="changeImageTheme('film')" style="background:#1a1a1a; color:#fff; border-color:#000;">필름카메라</button>
+                                </div>
+
+                                <label style="font-size:11px; color:var(--soft); font-weight:bold; margin-top:6px;">3. 자르기 조절 (줌/이동)</label>
+                                <div class="row" style="align-items:center;">
+                                    <span style="font-size:11px; width:40px;">확대</span>
+                                    <input type="range" id="ctrl-img-scale" min="0.5" max="3" step="0.05" value="1" oninput="updateImageTransform()">
+                                </div>
+                                <div class="row" style="align-items:center;">
+                                    <span style="font-size:11px; width:40px;">좌우</span>
+                                    <input type="range" id="ctrl-img-x" min="-100" max="100" value="0" oninput="updateImageTransform()">
+                                </div>
+                                <div class="row" style="align-items:center;">
+                                    <span style="font-size:11px; width:40px;">상하</span>
+                                    <input type="range" id="ctrl-img-y" min="-100" max="100" value="0" oninput="updateImageTransform()">
+                                </div>
+
+                                <label style="font-size:11px; color:var(--soft); font-weight:bold; margin-top:6px;">4. 캡션 (폴라로이드 메모 / 필름 날짜)</label>
+                                <input type="text" id="ctrl-img-caption" placeholder="메모나 날짜(예: '98 12 24) 입력">
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="ctrl-wrap" id="ctrl-wrap-tl">
+                        <details class="ctrl-section">
+                            <summary>
+                                <span class="drag-h" title="드래그로 순서 변경">⠿</span>
+                                <input type="checkbox" class="block-toggle-cb" value="block-tl" checked onchange="toggleBlock('block-tl', this)"> 🕰️ 타임라인
+                            </summary>
+                            <div class="ctrl-content">
+                                <input type="text" id="ctrl-tl-title" placeholder="제목" value="🕰️ 타임라인">
+                                <div id="ctrl-tl-container"></div>
+                                <button class="add-btn" style="width:100%" onclick="addTl()">+ 사건 기록 추가</button>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="ctrl-wrap" id="ctrl-wrap-quote1">
+                        <details class="ctrl-section">
+                            <summary>
+                                <span class="drag-h" title="드래그로 순서 변경">⠿</span>
+                                <input type="checkbox" class="block-toggle-cb" value="block-quote1" checked onchange="toggleBlock('block-quote1', this)"> 🌌 심리 (단일)
+                            </summary>
+                            <div class="ctrl-content">
+                                <input type="text" id="ctrl-q1-icon" placeholder="제목/아이콘">
+                                <textarea id="ctrl-q1-text" rows="2" placeholder="독백이나 인용구"></textarea>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="ctrl-wrap" id="ctrl-wrap-quote2">
+                        <details class="ctrl-section">
+                            <summary>
+                                <span class="drag-h" title="드래그로 순서 변경">⠿</span>
+                                <input type="checkbox" class="block-toggle-cb" value="block-quote2" checked onchange="toggleBlock('block-quote2', this)"> 💬 심리 (문답)
+                            </summary>
+                            <div class="ctrl-content">
+                                <div class="row">
+                                    <input type="text" id="ctrl-q2-f1" placeholder="A 얼굴">
+                                    <input type="text" id="ctrl-q2-f2" placeholder="B 얼굴">
+                                </div>
+                                <textarea id="ctrl-q2-text" rows="2" placeholder="속마음"></textarea>
+                                <input type="text" id="ctrl-q2-q" placeholder="Q. 질문">
+                                <textarea id="ctrl-q2-a" rows="2" placeholder="A. 대답"></textarea>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="ctrl-wrap" id="ctrl-wrap-tmi">
+                        <details class="ctrl-section">
+                            <summary>
+                                <span class="drag-h" title="드래그로 순서 변경">⠿</span>
+                                <input type="checkbox" class="block-toggle-cb" value="block-tmi" checked onchange="toggleBlock('block-tmi', this)"> 💡 TMI
+                            </summary>
+                            <div class="ctrl-content">
+                                <input type="text" id="ctrl-tmi" placeholder="TMI 내용을 적어주세요">
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="ctrl-wrap" id="ctrl-wrap-device">
+                        <details class="ctrl-section">
+                            <summary>
+                                <span class="drag-h" title="드래그로 순서 변경">⠿</span>
+                                <input type="checkbox" class="block-toggle-cb" value="block-device" checked onchange="toggleBlock('block-device', this)"> 📱 단말기 (메시지/알림)
+                            </summary>
+                            <div class="ctrl-content">
+                                <label style="font-size:11px; color:var(--soft); font-weight:bold;">1. 단말기 테마 선택</label>
+                                <div class="format-btns" style="margin-bottom:6px;">
+                                    <button onclick="changeDeviceTheme('kakao')" style="background:#fee500; border-color:#e6c300;">💬 카톡</button>
+                                    <button onclick="changeDeviceTheme('imessage')" style="background:#007aff; color:#fff;">💬 아이메시지</button>
+                                    <button onclick="changeDeviceTheme('lockscreen')" style="background:#1e3c72; color:#fff; border-color:#1e3c72;">🔒 잠금화면</button>
+                                    <button onclick="changeDeviceTheme('terminal')" style="background:#000; color:var(--blue); border-color:var(--blue);">🚨 시스템 터미널</button>
+                                </div>
+                                <input type="text" id="ctrl-dev-title" placeholder="단말기 제목 (예: 📱 수신 메시지)">
+
+                                <div id="ctrl-lock-settings" style="display:none; background:#f1f5f9; padding:8px; border-radius:6px; border:1px solid #e2e8f0; margin-bottom:6px;">
+                                    <label style="font-size:10px; color:var(--soft); font-weight:bold; display:block; margin-bottom:4px;">잠금화면 상단 시계 설정</label>
+                                    <div class="row">
+                                        <input type="text" id="ctrl-lock-time" placeholder="시간 (예: 2:46)">
+                                        <input type="text" id="ctrl-lock-date" placeholder="날짜 (예: Thursday 04/13)">
+                                    </div>
+                                </div>
+
+                                <div id="ctrl-dev-container"></div>
+                                <button class="add-btn" style="width:100%" onclick="addDeviceItem()">+ 메시지(알림) 추가</button>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="ctrl-wrap" id="ctrl-wrap-inventory">
+                        <details class="ctrl-section">
+                            <summary>
+                                <span class="drag-h" title="드래그로 순서 변경">⠿</span>
+                                <input type="checkbox" class="block-toggle-cb" value="block-inventory" checked onchange="toggleBlock('block-inventory', this)"> 🎒 소지품
+                            </summary>
+                            <div class="ctrl-content">
+                                <input type="text" id="ctrl-inv-title" placeholder="제목 (🎒 소지품)">
+                                <textarea id="ctrl-inv-items" rows="2" placeholder="사과, 물약, 낡은 수첩&#10;(쉼표로 구분하여 여러 개를 적어주세요)"></textarea>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="ctrl-wrap" id="ctrl-wrap-note">
+                        <details class="ctrl-section">
+                            <summary>
+                                <span class="drag-h" title="드래그로 순서 변경">⠿</span>
+                                <input type="checkbox" class="block-toggle-cb" value="block-note" checked onchange="toggleBlock('block-note', this)"> 📚 노트
+                            </summary>
+                            <div class="ctrl-content">
+                                <input type="text" id="ctrl-note-icon" placeholder="제목 (📚 노트)">
+                                <div id="ctrl-note-container"></div>
+                                <div class="row">
+                                    <button class="add-btn" onclick="addNoteLine()">+ 글쓰기 줄 추가</button>
+                                    <button class="add-btn" onclick="addNoteDesc()">+ 작고 흐린 서술 추가</button>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="ctrl-wrap" id="ctrl-wrap-bgm">
+                        <details class="ctrl-section">
+                            <summary>
+                                <span class="drag-h" title="드래그로 순서 변경">⠿</span>
+                                <input type="checkbox" class="block-toggle-cb" value="block-bgm" checked onchange="toggleBlock('block-bgm', this)"> 🎵 BGM (테마곡)
+                            </summary>
+                            <div class="ctrl-content">
+                                <input type="text" id="ctrl-bgm-h2" placeholder="제목 (🎵 BGM)">
+                                <div class="row">
+                                    <input type="text" id="ctrl-bgm-icon" placeholder="아이콘(💿)" style="width:80px;">
+                                    <input type="text" id="ctrl-bgm-title" placeholder="노래 제목" style="flex:1;">
+                                </div>
+                                <input type="text" id="ctrl-bgm-artist" placeholder="가수 이름">
+                                <textarea id="ctrl-bgm-lyrics" rows="3" placeholder="가사나 노래 분위기"></textarea>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="ctrl-wrap" id="ctrl-wrap-wish">
+                        <details class="ctrl-section">
+                            <summary>
+                                <span class="drag-h" title="드래그로 순서 변경">⠿</span>
+                                <input type="checkbox" class="block-toggle-cb" value="block-wish" checked onchange="toggleBlock('block-wish', this)"> ⭐ 위시 리스트
+                            </summary>
+                            <div class="ctrl-content">
+                                <input type="text" id="ctrl-wish-title" placeholder="제목 (⭐ 위시)">
+                                <div id="ctrl-wish-container"></div>
+                                <button class="add-btn" style="width:100%" onclick="addWish()">+ 항목 추가</button>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="ctrl-wrap" id="ctrl-wrap-promise">
+                        <details class="ctrl-section">
+                            <summary>
+                                <span class="drag-h" title="드래그로 순서 변경">⠿</span>
+                                <input type="checkbox" class="block-toggle-cb" value="block-promise" checked onchange="toggleBlock('block-promise', this)"> 🤝 약속
+                            </summary>
+                            <div class="ctrl-content">
+                                <input type="text" id="ctrl-promise-title" placeholder="제목 (🤝 약속)">
+                                <div id="ctrl-promise-container"></div>
+                                <button class="add-btn" style="width:100%" onclick="addPromise()">+ 약속 추가</button>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="ctrl-wrap" id="ctrl-wrap-todo">
+                        <details class="ctrl-section">
+                            <summary>
+                                <span class="drag-h" title="드래그로 순서 변경">⠿</span>
+                                <input type="checkbox" class="block-toggle-cb" value="block-todo" checked onchange="toggleBlock('block-todo', this)"> ✏️ 투두
+                            </summary>
+                            <div class="ctrl-content">
+                                <input type="text" id="ctrl-todo-title" placeholder="제목 (✏️ 투두)">
+                                <div class="row">
+                                    <div style="flex:1">
+                                        <input type="text" id="ctrl-todo-n1" placeholder="인물 1" style="margin-bottom:4px;">
+                                        <textarea id="ctrl-todo-t1" rows="3" placeholder="할일 목록"></textarea>
+                                    </div>
+                                    <div style="flex:1">
+                                        <input type="text" id="ctrl-todo-n2" placeholder="인물 2" style="margin-bottom:4px;">
+                                        <textarea id="ctrl-todo-t2" rows="3" placeholder="할일 목록"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="ctrl-wrap" id="ctrl-wrap-plan">
+                        <details class="ctrl-section">
+                            <summary>
+                                <span class="drag-h" title="드래그로 순서 변경">⠿</span>
+                                <input type="checkbox" class="block-toggle-cb" value="block-plan" checked onchange="toggleBlock('block-plan', this)"> 🎯 기획
+                            </summary>
+                            <div class="ctrl-content">
+                                <input type="text" id="ctrl-plan-title" placeholder="제목 (🎯 기획)">
+                                <div id="ctrl-plan-container"></div>
+                                <button class="add-btn" style="width:100%" onclick="addPlan()">+ 기획 추가</button>
+                            </div>
+                        </details>
+                    </div>
+                </div> <!-- //sortable-wrapper 끝 -->
+
+                <button class="add-btn" id="add-custom-btn" style="width:100%;margin-top:8px" onclick="addCustomBlock()">+ 내 마음대로 블럭 추가하기</button>
+
+            </div>
+
+            <!-- 4. 다중 슬롯 및 완료 -->
+            <div class="ctrl-box" id="slot-box">
+                <h3>📂 백업 및 복원 (슬롯)</h3>
+                <div class="format-btns" id="slot-btns-container"></div>
+                <div class="format-btns" style="margin-top:8px">
+                    <button onclick="undoSnap()">⏪ 이전 상태 복구</button>
+                    <button onclick="exportJSON()">📤 파일 저장</button>
+                    <button onclick="document.getElementById('json-in').click()">📥 파일 불러오기</button>
+                    <input type="file" id="json-in" accept=".json" style="display:none" onchange="importJSON(event)">
+                </div>
+                <p style="font-size:11px;color:#64748b;margin:8px 0 0">단축키: Ctrl+S 로 강제 저장</p>
+            </div>
+
+            <div class="ctrl-box">
+                <h3>💾 이미지로 추출</h3>
+                <div class="save-btns">
+                    <button onclick="saveAsImage()">📷 깔끔하게 이미지로 캡처 (PNG)</button>
+                    <button class="copy-btn" onclick="copyCleanHTML()">📋 HTML 코드 복사</button>
+                    <button class="reset-btn" onclick="resetAll()">🗑️ 전체 초기화 (새로 만들기)</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- === 오른쪽: 상태창 프리뷰 === -->
+        <div class="preview-area" id="capture-area" data-font="gothic" data-skin="default">
+
+            <header id="block-header" class="theme-day">
+                <div class="date" id="prev-date" contenteditable="true" data-placeholder="YY.MM.DD. 요일"></div>
+                <h1 id="prev-title" contenteditable="true" data-placeholder="장소나 제목을 입력하세요"></h1>
+                <div class="chips">
+                    <span class="chip time-input" id="prev-time" contenteditable="true" data-placeholder="시간 (예: PM 11:58)"></span>
+                    <span class="chip" id="prev-weather" contenteditable="true" data-placeholder="날씨 (예: 비, 눈, 맑음)"></span>
+                </div>
+            </header>
+
+            <div class="card" id="block-love">
+                <div class="love">💕 <b id="prev-love-val" contenteditable="true" data-placeholder="0"></b>
+                    <div class="bar"><i id="love-bar"></i></div>
+                </div>
+                <div class="muted" id="prev-love-desc" contenteditable="true" data-placeholder="애정 상태에 대한 설명을 적어주세요."></div>
+            </div>
+
+            <div class="card" id="block-dday">
+                <h2 id="prev-dday-title" contenteditable="true" data-placeholder="📅 D-day">📅 D-day</h2>
+                <div id="list-dday"></div>
+            </div>
+
+            <div class="img-block-wrapper" id="block-image">
+                <div id="prev-img-container" class="frame-basic">
+                    <div class="tape" style="display:none;"></div>
+                    <div class="img-crop">
+                        <div id="prev-img-placeholder" style="padding:40px 0; text-align:center; color:var(--soft); font-size:12px; width:100%;">📷 설정 패널에서<br>이미지를 업로드해주세요</div>
+                        <img id="prev-img" src="" style="display:none; transform: scale(1) translate(0%, 0%);" />
+                    </div>
+                    <div id="prev-img-caption" class="img-caption main-text" contenteditable="true" data-placeholder="사진 메모 / 날짜"></div>
+                </div>
+            </div>
+
+            <div class="card" id="block-tl">
+                <h2 id="prev-tl-title" contenteditable="true" data-placeholder="🕰️ 타임라인">🕰️ 타임라인</h2>
+                <div id="list-tl"></div>
+            </div>
+
+            <div class="card" id="block-quote1">
+                <h2 id="prev-q1-icon" contenteditable="true" data-placeholder="아이콘 (예: 🌌)"></h2>
+                <p class="quote" id="prev-q1-text" contenteditable="true" data-placeholder="혼자만의 심리 상태나 독백을 적어보세요."></p>
+            </div>
+
+            <div class="card" id="block-quote2">
+                <div class="face">
+                    <span id="prev-q2-f1" contenteditable="true" data-placeholder="A의 표정"></span>
+                    <span id="prev-q2-f2" contenteditable="true" data-placeholder="B의 표정"></span>
+                </div>
+                <p class="quote" id="prev-q2-text" contenteditable="true" data-placeholder="속마음이나 인용구"></p>
+                <div class="q">
+                    <em id="prev-q2-q" contenteditable="true" data-placeholder="Q. 질문을 적어주세요."></em>
+                    <span id="prev-q2-a" contenteditable="true" data-placeholder="A. 대답을 적어주세요."></span>
+                </div>
+            </div>
+
+            <div class="tmi" id="block-tmi" contenteditable="true" data-placeholder="💡 TMI · 인물에 대한 가벼운 정보를 적어보세요."></div>
+
+            <div class="card" id="block-device">
+                <h2 id="prev-dev-title" class="dev-title" contenteditable="true" data-placeholder="📱 단말기"></h2>
+                <div id="prev-dev-container" class="dev-container dev-theme-kakao">
+                    <div class="lock-header">
+                        <div id="prev-lock-time" class="lock-time main-text" contenteditable="true" data-placeholder="2:46"></div>
+                        <div id="prev-lock-date" class="lock-date main-text" contenteditable="true" data-placeholder="Thursday 04/13"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" id="block-inventory">
+                <h2 id="prev-inv-title" contenteditable="true" data-placeholder="🎒 소지품"></h2>
+                <div id="list-inventory" class="inv-list"></div>
+            </div>
+
+            <div class="card" id="block-note">
+                <h2 id="prev-note-icon" contenteditable="true" data-placeholder="📚 노트"></h2>
+                <div class="pages dynamic-list" id="list-note" data-type="note"></div>
+            </div>
+
+            <div class="card" id="block-bgm">
+                <h2 id="prev-bgm-h2" contenteditable="true" data-placeholder="🎵 BGM"></h2>
+                <div class="bgm-player">
+                    <div id="prev-bgm-icon" class="bgm-icon main-text" contenteditable="true" data-placeholder="💿"></div>
+                    <div class="bgm-info">
+                        <div id="prev-bgm-title" class="bgm-title main-text" contenteditable="true" data-placeholder="노래 제목"></div>
+                        <div id="prev-bgm-artist" class="bgm-artist main-text" contenteditable="true" data-placeholder="가수 이름"></div>
+                    </div>
+                </div>
+                <div class="bgm-lyrics main-text" id="prev-bgm-lyrics" contenteditable="true" data-placeholder="재생할 곡의 가사나 분위기를 적어보세요"></div>
+            </div>
+
+            <div class="card" id="block-wish">
+                <h2 id="prev-wish-title" contenteditable="true" data-placeholder="⭐ 위시"></h2>
+                <ol id="list-wish" class="dynamic-list" data-type="wish"></ol>
+            </div>
+
+            <div class="card" id="block-promise">
+                <h2 id="prev-promise-title" contenteditable="true" data-placeholder="🤝 약속"></h2>
+                <ul id="list-promise" class="dynamic-list" data-type="promise"></ul>
+            </div>
+
+            <div class="card" id="block-todo">
+                <h2 id="prev-todo-title" contenteditable="true" data-placeholder="✏️ 투두"></h2>
+                <div class="two">
+                    <div>
+                        <h3 id="prev-todo-n1" contenteditable="true" data-placeholder="인물 1"></h3>
+                        <span id="prev-todo-t1" contenteditable="true" data-placeholder="할 일 목록"></span>
+                    </div>
+                    <div>
+                        <h3 id="prev-todo-n2" contenteditable="true" data-placeholder="인물 2"></h3>
+                        <span id="prev-todo-t2" contenteditable="true" data-placeholder="할 일 목록"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" id="block-plan">
+                <h2 id="prev-plan-title" contenteditable="true" data-placeholder="🎯 기획"></h2>
+                <div id="list-plan" class="dynamic-list" data-type="plan"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // ==========================================
+        // 💾 데이터 스토리지 시스템 
+        // ==========================================
+        const SAVE_KEY = 'makerSaveDataV22';
+        let snapHistory = [],
+            lastSnapTime = 0;
+
+        function getSlotNum() {
+            return localStorage.getItem('makerSlot') || '1';
+        }
+
+        function getStoreKey(k) {
+            return (k === SAVE_KEY && getSlotNum() !== '1') ? 'makerV22_' + getSlotNum() : k;
+        }
+
+        function showToast(msg) {
+            let t = document.getElementById('v22-toast');
+            if (!t) {
+                t = document.createElement('div');
+                t.id = 'v22-toast';
+                t.style.cssText = 'position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1e293b;color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;z-index:9999;transition:opacity .3s;max-width:90%';
+                document.body.appendChild(t);
+            }
+            t.textContent = msg;
+            t.style.opacity = 1;
+            clearTimeout(t._t);
+            t._t = setTimeout(() => t.style.opacity = 0, 2800);
+        }
+
+        function performAutoSave() {
+            document.querySelectorAll('input[type="text"], input[type="number"], input[type="range"], input[type="color"], input[type="date"]').forEach(i => i.setAttribute('value', i.value));
+            document.querySelectorAll('textarea').forEach(t => t.innerHTML = t.value);
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                if (cb.checked) cb.setAttribute('checked', 'checked');
+                else cb.removeAttribute('checked');
+            });
+
+            const dataObj = {
+                preview: document.getElementById('capture-area').innerHTML,
+                ctrls: document.getElementById('sortable-wrapper').innerHTML,
+                theme: document.documentElement.getAttribute('data-theme'),
+                skin: document.getElementById('capture-area').getAttribute('data-skin'),
+                font: document.getElementById('capture-area').getAttribute('data-font')
+            };
+
+            if (dataObj.theme === 'custom') {
+                dataObj.customMain = document.getElementById('custom-main-color').value;
+                dataObj.customBg = document.getElementById('custom-bg-color').value;
+            }
+
+            const jsonStr = JSON.stringify(dataObj);
+            const now = Date.now();
+
+            if (snapHistory[snapHistory.length - 1] !== jsonStr && (!snapHistory.length || now - lastSnapTime > 1500)) {
+                snapHistory.push(jsonStr);
+                if (snapHistory.length > 10) snapHistory.shift();
+                lastSnapTime = now;
+            }
+            try {
+                localStorage.setItem(getStoreKey(SAVE_KEY), jsonStr);
+            } catch (e) {
+                showToast('⚠️ 저장 공간 부족! 브라우저 캐시를 지우거나 JSON 백업을 권장합니다.');
+            }
+        }
+
+        function forceAutoSave() {
+            clearTimeout(window.autoSaveTimer);
+            performAutoSave();
+        }
+
+        // ==========================================
+        // ⌨️ 글로벌 스마트 스캐너 (입력 동기화)
+        // ==========================================
+        document.addEventListener('input', (e) => {
+            if (e.target.isContentEditable && (e.target.innerHTML === '<br>' || e.target.innerHTML === '&nbsp;')) {
+                e.target.innerHTML = '';
+            }
+            if (e.target.hasAttribute('contenteditable')) {
+                const id = e.target.id;
+                if (id && id.startsWith('prev-')) {
+                    const ctrlId = id.replace('prev-', 'ctrl-');
+                    const ctrl = document.getElementById(ctrlId);
+                    if (ctrl) {
+                        if (ctrl.tagName === 'INPUT' || ctrl.tagName === 'TEXTAREA') ctrl.value = e.target.innerText;
+                        else ctrl.innerText = e.target.innerText;
+                    }
+                    if (id === 'prev-time' || id === 'prev-weather') updateHeaderTheme();
+                    if (id === 'prev-love-val') updateLoveBar(e.target.innerText);
+                }
+            } else if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                const id = e.target.id;
+                if (id && id.startsWith('ctrl-')) {
+                    const prevId = id.replace('ctrl-', 'prev-');
+                    const prev = document.getElementById(prevId);
+                    if (prev) prev.innerText = e.target.value;
+                    if (id === 'ctrl-time' || id === 'ctrl-weather') updateHeaderTheme();
+                    if (id === 'ctrl-love-val') updateLoveBar(e.target.value);
+                }
+            }
+            clearTimeout(window.autoSaveTimer);
+            window.autoSaveTimer = setTimeout(performAutoSave, 1000);
+        });
+
+        document.addEventListener('paste', e => {
+            if (e.target.isContentEditable) {
+                e.preventDefault();
+                document.execCommand('insertText', false, e.clipboardData.getData('text/plain'));
+            }
+        });
+        document.addEventListener('keydown', e => {
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+                e.preventDefault();
+                forceAutoSave();
+                showToast('💾 강제 저장 완료!');
+            }
+            if (e.key === 'Enter') {
+                const listContainer = e.target.closest('.dynamic-list');
+                if (listContainer) {
+                    const type = listContainer.dataset.type;
+                    if (type === 'note') return;
+                    e.preventDefault();
+                    if (type === 'wish') addWish();
+                    if (type === 'promise') addPromise();
+                    if (type === 'plan') addPlan("", " / 단기", "");
+                    setTimeout(() => {
+                        const items = listContainer.querySelectorAll('.main-text');
+                        if (items.length > 0) items[items.length - 1].focus();
+                    }, 10);
+                }
+            }
+        });
+
+        // ==========================================
+        // ⚙️ 기능 제어 로직 (테마, 블럭, 색상)
+        // ==========================================
+        function changeFont(fontName) {
+            document.getElementById('capture-area').setAttribute('data-font', fontName);
+            forceAutoSave();
+        }
+
+        function changeSkin(skinName) {
+            document.getElementById('capture-area').setAttribute('data-skin', skinName);
+            forceAutoSave();
+        }
+
+        function changeTheme(themeName) {
+            const root = document.documentElement;
+            ['--navy', '--ink', '--h', '--blue', '--bg', '--card', '--line', '--point-bg', '--pinkt', '--bar1', '--bar2', '--soft', '--sky2', '--pale'].forEach(v => root.style.removeProperty(v));
+            if (themeName === 'default') root.removeAttribute('data-theme');
+            else root.setAttribute('data-theme', themeName);
+            forceAutoSave();
+        }
+
+        function applyCustomColors() {
+            const main = document.getElementById('custom-main-color').value;
+            const bg = document.getElementById('custom-bg-color').value;
+            const root = document.documentElement;
+            root.setAttribute('data-theme', 'custom');
+            let r = parseInt(main.slice(1, 3), 16),
+                g = parseInt(main.slice(3, 5), 16),
+                b = parseInt(main.slice(5, 7), 16);
+            const rgbMain = `${r}, ${g}, ${b}`;
+            root.style.setProperty('--navy', main);
+            root.style.setProperty('--ink', `rgba(${rgbMain}, 0.85)`);
+            root.style.setProperty('--h', `rgba(${rgbMain}, 0.9)`);
+            root.style.setProperty('--soft', `rgba(${rgbMain}, 0.6)`);
+            root.style.setProperty('--blue', `rgba(${rgbMain}, 0.7)`);
+            root.style.setProperty('--pinkt', main);
+            root.style.setProperty('--bar1', `rgba(${rgbMain}, 0.6)`);
+            root.style.setProperty('--bar2', `rgba(${rgbMain}, 0.3)`);
+            root.style.setProperty('--line', `rgba(${rgbMain}, 0.25)`);
+            root.style.setProperty('--bg', bg);
+            root.style.setProperty('--card', `rgba(${rgbMain}, 0.04)`);
+            root.style.setProperty('--point-bg', `rgba(${rgbMain}, 0.08)`);
+            root.style.setProperty('--sky2', `rgba(${rgbMain}, 0.08)`);
+            root.style.setProperty('--pale', `rgba(${rgbMain}, 0.03)`);
+            forceAutoSave();
+        }
+
+        function toggleAllBlocks(show) {
+            document.querySelectorAll('.block-toggle-cb').forEach(cb => {
+                cb.checked = show;
+                toggleBlock(cb.value, cb);
+            });
+            forceAutoSave();
+        }
+
+        function toggleBlock(blockId, checkbox) {
+            const block = document.getElementById(blockId);
+            if (block) block.style.display = checkbox.checked ? '' : 'none';
+            forceAutoSave();
+        }
+
+        function toggleAllPanels(open) {
+            document.querySelectorAll('details.ctrl-section').forEach(d => {
+                if (open) d.setAttribute('open', '');
+                else d.removeAttribute('open');
+            });
+        }
+
+        function moveBlock(blockId, ctrlWrapId, dir) {
+            const block = document.getElementById(blockId);
+            const ctrlWrap = document.getElementById(ctrlWrapId);
+            if (!block || !ctrlWrap) return;
+            if (dir === -1) {
+                if (block.previousElementSibling) block.parentNode.insertBefore(block, block.previousElementSibling);
+                if (ctrlWrap.previousElementSibling) ctrlWrap.parentNode.insertBefore(ctrlWrap, ctrlWrap.previousElementSibling);
+            } else {
+                if (block.nextElementSibling) block.parentNode.insertBefore(block.nextElementSibling, block);
+                if (ctrlWrap.nextElementSibling) ctrlWrap.parentNode.insertBefore(ctrlWrap.nextElementSibling, ctrlWrap);
+            }
+            forceAutoSave();
+        }
+
+        // ==========================================
+        // 🌟 상단 헤더 & 날씨 이펙트
+        // ==========================================
+        function updateHeaderTheme() {
+            const timeText = document.getElementById('prev-time')?.innerText || '';
+            const weatherText = document.getElementById('prev-weather')?.innerText || '';
+            const header = document.getElementById('block-header');
+            if (!header) return;
+
+            let hour = -1;
+            const match = timeText.match(/(am|pm|오전|오후)?\s*(\d{1,2})(?:\s*:\s*\d{1,2})?\s*(am|pm|오전|오후)?/i);
+            if (match) {
+                let ind = (match[1] || match[3] || '').toLowerCase();
+                let h = parseInt(match[2]);
+                if (ind === 'pm' || ind === '오후') {
+                    hour = h === 12 ? 12 : h + 12;
+                } else if (ind === 'am' || ind === '오전') {
+                    hour = h === 12 ? 0 : h;
+                } else {
+                    hour = h;
+                }
+            } else {
+                if (timeText.includes('밤') || timeText.includes('새벽')) hour = 22;
+                else if (timeText.includes('노을') || timeText.includes('저녁')) hour = 18;
+                else if (timeText.includes('낮') || timeText.includes('아침') || timeText.includes('오전')) hour = 10;
+            }
+            header.classList.remove('theme-day', 'theme-sunset', 'theme-night');
+            if (hour !== -1) {
+                if (hour >= 6 && hour < 17) header.classList.add('theme-day');
+                else if (hour >= 17 && hour < 19) header.classList.add('theme-sunset');
+                else header.classList.add('theme-night');
+            } else {
+                header.classList.add('theme-day');
+            }
+
+            header.classList.remove('w-rain', 'w-snow', 'w-cloud', 'w-storm');
+            let w = '';
+            if (/번개|천둥|뇌우|storm/i.test(weatherText)) w = 'storm';
+            else if (/비|소나기|rain/i.test(weatherText)) w = 'rain';
+            else if (/눈|snow/i.test(weatherText)) w = 'snow';
+            else if (/흐림|구름|안개|cloud|fog/i.test(weatherText)) w = 'cloud';
+            if (w) header.classList.add('w-' + w);
+        }
+
+        // ==========================================
+        // 📆 디데이 (D-Day) 스위치 로직
+        // ==========================================
+        function calcDday(dateStr, mode) {
+            if (!dateStr) return 'D-?';
+            const t = new Date();
+            t.setHours(0, 0, 0, 0);
+            const tgt = new Date(dateStr + 'T00:00:00');
+            const diff = Math.round((tgt - t) / 864e5);
+
+            if (mode === 'count') {
+                const passed = Math.round((t - tgt) / 864e5);
+                return passed >= 0 ? '💕 ' + (passed + 1) + '일' : 'D' + diff;
+            } else {
+                return diff === 0 ? 'D-Day' : diff > 0 ? 'D-' + diff : 'D+' + (-diff);
+            }
+        }
+
+        function toggleDdayMode(id) {
+            const b = document.getElementById('prev-b-' + id);
+            if (!b) return;
+            let m = b.getAttribute('data-mode') || 'dday';
+            b.setAttribute('data-mode', m === 'count' ? 'dday' : 'count');
+            ddUpdate(id);
+        }
+
+        function ddUpdate(id) {
+            const inp = document.getElementById('ctrl-d-' + id);
+            const b = document.getElementById('prev-b-' + id);
+            if (!inp || !b) return;
+            inp.setAttribute('value', inp.value);
+            b.textContent = calcDday(inp.value, b.getAttribute('data-mode'));
+            forceAutoSave();
+        }
+
+        function addDday(name = '', date = '') {
+            const id = 'dd-' + Math.floor(Math.random() * 100000);
+            document.getElementById('list-dday').insertAdjacentHTML('beforeend',
+                `<div class="dd-row" id="prev-${id}">
+                    <span id="prev-t-${id}" class="main-text" contenteditable="true" data-placeholder="이벤트명">${name}</span>
+                    <b class="dd-badge" id="prev-b-${id}" data-mode="dday">${calcDday(date, 'dday')}</b>
+                </div>`);
+            document.getElementById('ctrl-dday-container').insertAdjacentHTML('beforeend',
+                `<div class="row" id="ctrl-${id}" style="margin-bottom:4px">
+                    <input type="text" id="ctrl-t-${id}" placeholder="이벤트명" value="${name}" style="flex:1">
+                    <input type="date" id="ctrl-d-${id}" value="${date}" onchange="ddUpdate('${id}')" style="width:110px">
+                    <button class="color-btn" onclick="toggleDdayMode('${id}')" title="D-Day / 함께한날 전환">🔄</button>
+                    <button class="del-btn" onclick="removeRow('${id}')">✖</button>
+                </div>`);
+            forceAutoSave();
+        }
+
+        function addTl(time = '', text = '') {
+            const id = 'tl-' + Math.floor(Math.random() * 100000);
+            document.getElementById('list-tl').insertAdjacentHTML('beforeend',
+                `<div class="tl-row" id="prev-${id}"><span id="prev-tm-${id}" class="tl-time main-text" contenteditable="true" data-placeholder="시간">${time}</span><span class="tl-dot"></span><span id="prev-t-${id}" class="main-text" contenteditable="true" data-placeholder="사건 내용">${text}</span></div>`);
+            document.getElementById('ctrl-tl-container').insertAdjacentHTML('beforeend',
+                `<div class="row" id="ctrl-${id}" style="margin-bottom:4px"><input type="text" id="ctrl-tm-${id}" placeholder="시간" value="${time}" style="width:70px">
+                 <input type="text" id="ctrl-t-${id}" placeholder="내용" value="${text}" style="flex:1">
+                 <button class="del-btn" onclick="removeRow('${id}')">✖</button></div>`);
+            forceAutoSave();
+        }
+
+        function addCustomBlock() {
+            const id = 'custom' + (Date.now() % 100000);
+            document.getElementById('capture-area').insertAdjacentHTML('beforeend',
+                `<div class="card" id="block-${id}"><h2 id="prev-${id}-t" contenteditable="true" data-placeholder="📝 제목">📝 메모</h2>
+                 <p class="quote" id="prev-${id}-b" contenteditable="true" data-placeholder="자유롭게 적어보세요."></p></div>`);
+
+            const extra = `<input type="text" id="ctrl-${id}-t" placeholder="제목" value="📝 메모">
+                 <textarea id="ctrl-${id}-b" rows="3" placeholder="내용"></textarea>
+                 <button class="del-btn" onclick="delBlock('${id}')">🗑️ 이 블럭 완전히 삭제하기</button>`;
+
+            document.getElementById('sortable-wrapper').insertAdjacentHTML('beforeend',
+                `<div class="ctrl-wrap" id="ctrl-wrap-${id}"><details class="ctrl-section"><summary>
+                  <span class="drag-h" title="드래그로 순서 변경">⠿</span>
+                  <input type="checkbox" class="block-toggle-cb" value="block-${id}" checked onchange="toggleBlock('block-${id}',this)"> 📝 새로 만든 블럭
+                </summary><div class="ctrl-content">${extra}</div></details></div>`);
+            forceAutoSave();
+        }
+
+        function delBlock(id) {
+            if (!confirm('이 블럭을 완전히 삭제할까요?')) return;
+            const b = document.getElementById('block-' + id);
+            const w = document.getElementById('ctrl-wrap-' + id);
+            if (b) b.remove();
+            if (w) w.remove();
+            forceAutoSave();
+        }
+
+        function changeDeviceTheme(t) {
+            document.getElementById('prev-dev-container').className = 'dev-container dev-theme-' + t;
+            document.getElementById('ctrl-lock-settings').style.display = (t === 'lockscreen') ? 'block' : 'none';
+            forceAutoSave();
+        }
+
+        function toggleDevDir(id) {
+            const el = document.getElementById('prev-' + id);
+            if (el.classList.contains('right')) {
+                el.classList.remove('right');
+                el.classList.add('left');
+            } else {
+                el.classList.remove('left');
+                el.classList.add('right');
+            }
+            forceAutoSave();
+        }
+
+        function addDeviceItem(name = "", text = "") {
+            const id = 'dev-' + Math.floor(Math.random() * 10000);
+            document.getElementById('prev-dev-container').insertAdjacentHTML('beforeend', `
+                <div id="prev-${id}" class="dev-item left">
+                    <div id="prev-n-${id}" class="dev-name main-text" contenteditable="true" data-placeholder="이름/앱">${name}</div>
+                    <div id="prev-t-${id}" class="dev-text main-text" contenteditable="true" data-placeholder="내용">${text}</div>
+                </div>`);
+            document.getElementById('ctrl-dev-container').insertAdjacentHTML('beforeend', `
+                <div class="row" id="ctrl-${id}" style="margin-bottom:4px">
+                    <button class="add-btn" style="flex:0 0 30px; margin:0; padding:0;" onclick="toggleDevDir('${id}')" title="채팅방 좌우 전환">🔄</button>
+                    <input type="text" id="ctrl-n-${id}" placeholder="이름/앱" style="width:70px;" value="${name}">
+                    <input type="text" id="ctrl-t-${id}" placeholder="내용" style="flex:1;" value="${text}">
+                    <button class="del-btn" onclick="removeRow('${id}')">✖</button>
+                </div>`);
+            forceAutoSave();
+        }
+
+        document.getElementById('ctrl-inv-items').addEventListener('input', () => {
+            const val = document.getElementById('ctrl-inv-items').value;
+            const invPrev = document.getElementById('list-inventory');
+            invPrev.innerHTML = '';
+            if (!val.trim()) return;
+            val.split(',').forEach(item => {
+                if (!item.trim()) return;
+                const span = document.createElement('span');
+                span.className = 'inv-item main-text';
+                span.innerText = item.trim();
+                invPrev.appendChild(span);
+            });
+        });
+
+        function removeRow(id) {
+            const prev = document.getElementById('prev-' + id);
+            const ctrl = document.getElementById('ctrl-' + id);
+            if (prev) prev.remove();
+            if (ctrl) ctrl.remove();
+            forceAutoSave();
+        }
+
+        function addNoteLine(text = "") {
+            const id = 'noteline-' + Math.floor(Math.random() * 10000);
+            document.getElementById('list-note').insertAdjacentHTML('beforeend', `<div id="prev-${id}" class="note-line main-text" contenteditable="true" data-placeholder="노트 내용을 적으세요.">${text}</div>`);
+            document.getElementById('ctrl-note-container').insertAdjacentHTML('beforeend', `<div class="row" id="ctrl-${id}" style="margin-bottom:4px;"><textarea id="ctrl-t-${id}" placeholder="노트 문단 작성" rows="2" style="flex:1;">${text}</textarea><button class="del-btn" onclick="removeRow('${id}')">✖</button></div>`);
+            forceAutoSave();
+        }
+
+        function addNoteDesc(text = "") {
+            const id = 'notedesc-' + Math.floor(Math.random() * 10000);
+            document.getElementById('list-note').insertAdjacentHTML('beforeend', `<cite id="prev-${id}" class="note-desc main-text" contenteditable="true" data-placeholder="글씨체 등 부가 설명">${text}</cite>`);
+            document.getElementById('ctrl-note-container').insertAdjacentHTML('beforeend', `<div class="row" id="ctrl-${id}" style="margin-bottom:4px;"><input type="text" id="ctrl-t-${id}" placeholder="작고 흐린 서술 작성" style="flex:1" value="${text}"><button class="del-btn" onclick="removeRow('${id}')">✖</button></div>`);
+            forceAutoSave();
+        }
+
+        function addWish(text = "") {
+            const id = 'wish-' + Math.floor(Math.random() * 10000);
+            document.getElementById('list-wish').insertAdjacentHTML('beforeend', `<li id="prev-${id}"><span id="prev-t-${id}" class="main-text" contenteditable="true" data-placeholder="위시 내용">${text}</span></li>`);
+            document.getElementById('ctrl-wish-container').insertAdjacentHTML('beforeend', `<div class="row" id="ctrl-${id}" style="margin-bottom:4px;"><input type="text" id="ctrl-t-${id}" placeholder="위시 내용" value="${text}"><button class="del-btn" onclick="removeRow('${id}')">✖</button></div>`);
+            forceAutoSave();
+        }
+
+        function addPromise(text = "", tag = "") {
+            const id = 'promise-' + Math.floor(Math.random() * 10000);
+            document.getElementById('list-promise').insertAdjacentHTML('beforeend', `<li id="prev-${id}"><span id="prev-t-${id}" class="main-text" contenteditable="true" data-placeholder="약속 내용">${text}</span> <span id="prev-tg-${id}" class="tag toggle-tag" contenteditable="true" data-placeholder="상태">${tag}</span></li>`);
+            document.getElementById('ctrl-promise-container').insertAdjacentHTML('beforeend', `<div class="row" id="ctrl-${id}" style="margin-bottom:4px;"><input type="text" id="ctrl-t-${id}" placeholder="약속 내용" style="flex:1" value="${text}"><input type="text" id="ctrl-tg-${id}" placeholder="태그" style="width:70px;" value="${tag}"><button class="color-btn" onclick="toggleTagState('prev-tg-${id}')" title="상태/색상 변경">🎨</button><button class="del-btn" onclick="removeRow('${id}')">✖</button></div>`);
+            forceAutoSave();
+        }
+
+        function addPlan(title = "", tag = " / 단기", desc = "") {
+            const id = 'plan-' + Math.floor(Math.random() * 10000);
+            document.getElementById('list-plan').insertAdjacentHTML('beforeend', `<div class="goal" id="prev-${id}"><h3 id="prev-t-${id}" class="main-text" contenteditable="true" data-placeholder="기획 제목">${title}</h3> <span id="prev-tg-${id}" class="tag toggle-tag plan-type plan" contenteditable="true" data-placeholder="기간 / 단기">${tag}</span><p id="prev-d-${id}" contenteditable="true" data-placeholder="세부 내용이나 이유를 적으세요">${desc}</p></div>`);
+            document.getElementById('ctrl-plan-container').insertAdjacentHTML('beforeend', `<div class="row" id="ctrl-${id}" style="margin-bottom:8px;background:#f8fafc;padding:8px;border-radius:8px;flex-direction:column;"><div class="row"><input type="text" id="ctrl-t-${id}" placeholder="기획 제목" style="flex:1" value="${title}"><input type="text" id="ctrl-tg-${id}" placeholder="기간 / 단기" style="width:90px;" value="${tag}"><button class="color-btn" onclick="toggleTagState('prev-tg-${id}')" title="스위치">🎨</button><button class="del-btn" onclick="removeRow('${id}')">✖</button></div><textarea id="ctrl-d-${id}" rows="2" placeholder="세부 내용">${desc}</textarea></div>`);
+            forceAutoSave();
+        }
+
+        function toggleTagState(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            window.getSelection().removeAllRanges();
+            let isPlanType = el.classList.contains('plan-type');
+            let text = el.innerText;
+            let nextSuffix = "";
+            if (el.classList.contains('plan')) {
+                el.classList.remove('plan');
+                el.classList.add('mid');
+                nextSuffix = "중기";
+            } else if (el.classList.contains('mid')) {
+                el.classList.remove('mid');
+                nextSuffix = "장기";
+            } else {
+                el.classList.add('plan');
+                nextSuffix = "단기";
+            }
+
+            if (isPlanType) {
+                if (text.trim() === '' || text === el.getAttribute('data-placeholder')) text = " / " + nextSuffix;
+                else if (/(단기|중기|장기)/.test(text)) text = text.replace(/(단기|중기|장기)/, nextSuffix);
+                else text = text + " / " + nextSuffix;
+                el.innerText = text;
+                const ctrlInput = document.getElementById(id.replace('prev-', 'ctrl-'));
+                if (ctrlInput) ctrlInput.value = text;
+            }
+            forceAutoSave();
+        }
+        document.addEventListener('dblclick', e => {
+            if (e.target.classList.contains('toggle-tag')) toggleTagState(e.target.id);
+        });
+
+        function updateLoveBar(v) {
+            document.getElementById('love-bar').style.width = (Math.min(parseInt(v.replace(/[^0-9]/g, '')) || 0, 100)) + '%';
+        }
+
+        function applyEffect(className) {
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
+            const range = selection.getRangeAt(0);
+            if (range.collapsed) return;
+            let parent = range.commonAncestorContainer;
+            if (parent.nodeType === 3) parent = parent.parentNode;
+            if (parent.classList && parent.classList.contains(className)) {
+                const text = document.createTextNode(parent.textContent);
+                parent.parentNode.replaceChild(text, parent);
+                return;
+            }
+            const span = document.createElement('span');
+            span.className = className;
+            span.textContent = range.toString();
+            range.deleteContents();
+            range.insertNode(span);
+            selection.removeAllRanges();
+            forceAutoSave();
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    let w = img.width;
+                    let h = img.height;
+                    const MAX = 800;
+                    if (w > MAX) {
+                        h = Math.round(h * MAX / w);
+                        w = MAX;
+                    }
+                    canvas.width = w;
+                    canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, w, h);
+                    const base64 = canvas.toDataURL('image/jpeg', 0.85);
+                    const prevImg = document.getElementById('prev-img');
+                    prevImg.src = base64;
+                    prevImg.style.display = 'block';
+                    document.getElementById('prev-img-placeholder').style.display = 'none';
+                    document.getElementById('ctrl-img-scale').value = 1;
+                    document.getElementById('ctrl-img-x').value = 0;
+                    document.getElementById('ctrl-img-y').value = 0;
+                    updateImageTransform();
+                }
+                img.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+
+        function clearImage() {
+            document.getElementById('prev-img').src = '';
+            document.getElementById('prev-img').style.display = 'none';
+            document.getElementById('prev-img-placeholder').style.display = 'block';
+            document.getElementById('ctrl-img-upload').value = '';
+            forceAutoSave();
+        }
+
+        function updateImageTransform() {
+            const scale = document.getElementById('ctrl-img-scale').value;
+            const x = document.getElementById('ctrl-img-x').value;
+            const y = document.getElementById('ctrl-img-y').value;
+            document.getElementById('prev-img').style.transform = `scale(${scale}) translate(${x}%, ${y}%)`;
+            forceAutoSave();
+        }
+
+        function changeImageTheme(theme) {
+            document.getElementById('prev-img-container').className = 'frame-' + theme;
+            forceAutoSave();
+        }
+
+        // ==========================================
+        // 🔄 초기화 및 데이터 로드 프로세스
+        // ==========================================
+        function updateSlotButtons() {
+            let btns = '';
+            for (let i = 1; i <= 5; i++) {
+                btns += `<button onclick="switchSlot(${i})" style="${getSlotNum() == i ? 'background:#3b82f6;color:#fff;' : ''}">슬롯 ${i}</button>`;
+            }
+            const container = document.getElementById('slot-btns-container');
+            if (container) container.innerHTML = btns;
+        }
+
+        function switchSlot(n) {
+            forceAutoSave();
+            localStorage.setItem('makerSlot', n);
+            location.reload();
+        }
+
+        function loadSaveData() {
+            updateSlotButtons();
+
+            if (window.Sortable && document.getElementById('sortable-wrapper')) {
+                Sortable.create(document.getElementById('sortable-wrapper'), {
+                    draggable: '.ctrl-wrap',
+                    handle: '.drag-h',
+                    animation: 150,
+                    onEnd() {
+                        document.getElementById('sortable-wrapper').querySelectorAll('.ctrl-wrap').forEach(w => {
+                            const blockId = w.id.replace('ctrl-wrap-', 'block-');
+                            const b = document.getElementById(blockId);
+                            if (b) document.getElementById('capture-area').appendChild(b);
+                        });
+                        forceAutoSave();
+                    }
+                });
+            }
+
+            const str = localStorage.getItem(getStoreKey(SAVE_KEY));
+            if (str) {
+                try {
+                    const data = JSON.parse(str);
+                    document.getElementById('capture-area').innerHTML = data.preview;
+                    document.getElementById('sortable-wrapper').innerHTML = data.ctrls;
+
+                    if (data.theme === 'custom') {
+                        document.getElementById('custom-main-color').value = data.customMain;
+                        document.getElementById('custom-bg-color').value = data.customBg;
+                        applyCustomColors();
+                    } else if (data.theme) {
+                        document.documentElement.setAttribute('data-theme', data.theme);
+                    }
+                    if (data.skin) document.getElementById('capture-area').setAttribute('data-skin', data.skin);
+                    if (data.font) document.getElementById('capture-area').setAttribute('data-font', data.font);
+
+                    document.querySelectorAll('input, textarea').forEach(el => {
+                        if (el.hasAttribute('value')) el.value = el.getAttribute('value');
+                        if (el.type === 'checkbox') el.checked = el.hasAttribute('checked');
+                    });
+
+                    document.querySelectorAll('input[type="date"]').forEach(inp => {
+                        if (inp.id.startsWith('ctrl-d-dd-')) {
+                            inp.addEventListener('change', () => ddUpdate(inp.id.replace('ctrl-d-dd-', 'dd-')));
+                        }
+                    });
+
+                    const devThemeClass = document.getElementById('prev-dev-container').className;
+                    if (devThemeClass.includes('lockscreen')) document.getElementById('ctrl-lock-settings').style.display = 'block';
+                    updateHeaderTheme();
+
+                } catch (e) {
+                    initDefaultBlocks();
+                }
+            } else {
+                initDefaultBlocks();
+            }
+        }
+
+        function initDefaultBlocks() {
+            addDeviceItem("지우", "밥 챙겨먹어라");
+            addDeviceItem("나", "ㅇㅇ");
+
+            document.getElementById('ctrl-inv-items').value = "";
+            document.getElementById('list-inventory').innerHTML = "";
+
+            addNoteLine();
+            addWish();
+            addPromise();
+            addPlan("", " / 단기", "");
+
+            addDday("디데이 제목", "");
+
+            updateHeaderTheme();
+        }
+
+        window.onload = loadSaveData;
+
+        // ==========================================
+        // 📥 내보내기 및 백업 기능
+        // ==========================================
+        function resetAll() {
+            if (confirm("🚨 정말 모든 내용을 지우고 처음부터 다시 시작하시겠습니까?\n(현재 슬롯의 내용이 삭제됩니다.)")) {
+                localStorage.removeItem(getStoreKey(SAVE_KEY));
+                location.reload();
+            }
+        }
+
+        function undoSnap() {
+            const cur = localStorage.getItem(getStoreKey(SAVE_KEY));
+            let target;
+            if (snapHistory.length && cur !== snapHistory[snapHistory.length - 1]) target = snapHistory[snapHistory.length - 1];
+            else {
+                snapHistory.pop();
+                target = snapHistory[snapHistory.length - 1];
+            }
+
+            if (!target) return showToast('되돌릴 기록이 없어요.');
+            localStorage.setItem(getStoreKey(SAVE_KEY), target);
+            loadSaveData();
+            showToast('⏪ 이전 상태로 복원했어요.');
+        }
+
+        function exportJSON() {
+            forceAutoSave();
+            const blob = new Blob([localStorage.getItem(getStoreKey(SAVE_KEY)) || '{}'], {
+                type: 'application/json'
+            });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `상태창_슬롯${getSlotNum()}.json`;
+            a.click();
+        }
+
+        function importJSON(ev) {
+            const f = ev.target.files[0];
+            if (!f) return;
+            const r = new FileReader();
+            r.onload = () => {
+                try {
+                    const d = JSON.parse(r.result);
+                    if (!d.preview || !d.ctrls) throw 0;
+                    if (!confirm('현재 슬롯(' + getSlotNum() + ')을 파일 내용으로 덮어쓸까요?')) return;
+                    localStorage.setItem(getStoreKey(SAVE_KEY), r.result);
+                    location.reload();
+                } catch (e) {
+                    showToast('❌ 올바른 상태창 백업 파일이 아닙니다.');
+                }
+            };
+            r.readAsText(f);
+        }
+
+        function fillEmptyPlaceholders(target) {
+            const empties = [];
+            target.querySelectorAll('[contenteditable="true"]').forEach(el => {
+                if (el.innerText.trim() === '' || el.innerHTML === '<br>') {
+                    empties.push(el);
+                    el.innerText = el.getAttribute('data-placeholder') || '';
+                    el.style.color = '#94a3b8';
+                }
+            });
+            return empties;
+        }
+
+        function restoreEmpties(empties) {
+            empties.forEach(el => {
+                el.innerText = '';
+                el.style.color = '';
+            });
+        }
+
+        function saveAsImage() {
+            if (document.activeElement) document.activeElement.blur();
+            const target = document.getElementById('capture-area');
+            const empties = fillEmptyPlaceholders(target);
+
+            html2canvas(target, {
+                scale: 2,
+                backgroundColor: null,
+                useCORS: true
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = '상태창_캡처.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                restoreEmpties(empties);
+            });
+        }
+
+        function generateCleanHTMLString() {
+            forceAutoSave();
+            const clone = document.getElementById('capture-area').cloneNode(true);
+
+            clone.querySelectorAll('[style*="display: none"]').forEach(block => block.remove());
+
+            clone.querySelectorAll('[contenteditable="true"]').forEach(el => {
+                if (el.innerText.trim() === '' || el.innerHTML === '<br>') {
+                    el.innerText = el.getAttribute('data-placeholder') || '';
+                    el.style.color = '#94a3b8';
+                }
+                el.removeAttribute('contenteditable');
+                el.removeAttribute('data-placeholder');
+            });
+
+            clone.style.margin = "0 auto";
+            clone.style.maxWidth = "380px";
+            clone.style.position = "static";
+
+            const styles = document.querySelector('style').outerHTML;
+            const fonts = `<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&family=Gowun+Dodum&family=IBM+Plex+Mono:wght@400;500;600&family=Jua&family=Nanum+Myeongjo&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">`;
+
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const themeAttr = currentTheme ? ` data-theme="${currentTheme}"` : '';
+            const currentFont = document.getElementById('capture-area').getAttribute('data-font') || 'gothic';
+            const currentSkin = document.getElementById('capture-area').getAttribute('data-skin') || 'default';
+
+            let customStyle = "";
+            if (currentTheme === 'custom') {
+                const root = document.documentElement;
+                customStyle = `<style>:root[data-theme="custom"] { --navy: ${root.style.getPropertyValue('--navy')}; --ink: ${root.style.getPropertyValue('--ink')}; --h: ${root.style.getPropertyValue('--h')}; --soft: ${root.style.getPropertyValue('--soft')}; --blue: ${root.style.getPropertyValue('--blue')}; --pinkt: ${root.style.getPropertyValue('--pinkt')}; --bar1: ${root.style.getPropertyValue('--bar1')}; --bar2: ${root.style.getPropertyValue('--bar2')}; --line: ${root.style.getPropertyValue('--line')}; --bg: ${root.style.getPropertyValue('--bg')}; --card: ${root.style.getPropertyValue('--card')}; --point-bg: ${root.style.getPropertyValue('--point-bg')}; --sky2: ${root.style.getPropertyValue('--sky2')}; --pale: ${root.style.getPropertyValue('--pale')}; }</style>`;
+            }
+
+            return `<!DOCTYPE html>\n<html lang="ko"${themeAttr}>\n<head>\n<meta charset="utf-8">\n<title>성준언 상태창</title>\n${fonts}\n${styles}\n${customStyle}\n<style>body { background-color: transparent; padding: 20px; }</style>\n</head>\n<body>\n<div id="capture-area" data-font="${currentFont}" data-skin="${currentSkin}">\n${clone.innerHTML}\n</div>\n</body>\n</html>`;
+        }
+
+        function saveAsHTML() {
+            if (document.activeElement) document.activeElement.blur();
+            const htmlContent = generateCleanHTMLString();
+            const blob = new Blob([htmlContent], {
+                type: "text/html;charset=utf-8"
+            });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "상태창_작업백업.html";
+            link.click();
+        }
+
+        function copyCleanHTML() {
+            if (document.activeElement) document.activeElement.blur();
+            const cleanHTML = generateCleanHTMLString();
+
+            navigator.clipboard.writeText(cleanHTML).then(() => {
+                alert("✅ HTML 코드가 클립보드에 복사되었습니다!\n원하시는 곳에 바로 붙여넣기(Ctrl+V) 하세요.");
+            }).catch(err => {
+                alert("복사에 실패했습니다. 다른 브라우저를 이용해주세요.");
+            });
+        }
+    </script>
+</body>
+
+</html>
