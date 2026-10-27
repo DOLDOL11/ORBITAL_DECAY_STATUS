@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>성준언 상태창 (Pro Maker V22 - Perfect Details)</title>
+    <title>성준언 상태창 (Pro Maker V22.1 - Perfect Details)</title>
     <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&family=Gowun+Dodum&family=IBM+Plex+Mono:wght@400;500;600&family=Jua&family=Nanum+Myeongjo&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
@@ -1565,6 +1565,60 @@
             border: 1px solid var(--line);
         }
 
+        /* 💭 속마음 칸: 관계성 칸과 구분되게 점선 + 포인트 배경 */
+        .quote.inner {
+            background: var(--point-bg);
+            border-style: dashed;
+        }
+
+        /* 🌌 심리 머리줄: 아이콘 옆에 관계성을 작은 글씨로 */
+        .psych-head {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+
+        .psych-head h2 {
+            width: auto;
+            flex: none;
+            margin: 0;
+        }
+
+        .psych-rel {
+            display: block;
+            flex: 1;
+            min-width: 0;
+            font-size: 10.5px;
+            line-height: 1.4;
+            color: var(--soft);
+        }
+
+        #capture-area[data-skin="window"] .psych-head h2 {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        #capture-area[data-skin="window"] .psych-head {
+            border-bottom: 1px solid #808080;
+            padding-bottom: 2px;
+        }
+
+        /* 패널: 칸 이름표 */
+        .mini-label {
+            font-size: 11px;
+            color: #64748b;
+            font-weight: bold;
+            margin-bottom: -4px;
+        }
+
+        /* 🎒 소지품이 비어 있을 때 미리보기에서 바로 적는 칸 */
+        .inv-item.inv-new {
+            min-width: 170px;
+            background: var(--bg);
+            box-shadow: none;
+        }
+
         .quote+.quote,
         .quote+.q {
             margin-top: 4px;
@@ -1610,13 +1664,15 @@
         }
 
         .inv-item {
-            background: var(--bg);
-            border: 1px dashed var(--soft);
-            border-radius: 6px;
-            padding: 4px 10px;
+            background: var(--sky2);
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 3px 10px;
             font-size: 11px;
+            line-height: 1.4;
             color: var(--ink);
             display: inline-block;
+            box-shadow: 0 1px 0 var(--line);
             transition: all 0.2s;
         }
 
@@ -1782,7 +1838,8 @@
             display: inline-block;
         }
 
-        .goal p {
+        .goal p,
+        .goal .goal-desc {
             margin: 0;
             font-size: 11px;
             color: var(--soft);
@@ -2578,7 +2635,10 @@
                                         <input type="text" id="ctrl-q2-f1" placeholder="A 얼굴 (표정)">
                                         <input type="text" id="ctrl-q2-f2" placeholder="B 얼굴 (표정)">
                                     </div>
-                                    <textarea id="ctrl-q1-text" rows="2" placeholder="독백이나 속마음, 인용구"></textarea>
+                                    <label class="mini-label">🔗 관계성 (아이콘 옆 작은 글씨)</label>
+                                    <textarea id="ctrl-q1-text" rows="2" placeholder="두 사람의 관계 (예: 증명이 자꾸 고백이 되는 동행자)"></textarea>
+                                    <label class="mini-label">💭 속마음</label>
+                                    <textarea id="ctrl-q1-inner" rows="2" placeholder="속으로 하는 생각, 독백"></textarea>
                                     <label class="qa-toggle"><input type="checkbox" id="ctrl-qa-on" onchange="toggleQA(this.checked)"> 💬 Q&amp;A (질문·대답) 쓰기</label>
                                     <div id="ctrl-qa-fields" style="display:none;">
                                         <input type="text" id="ctrl-q2-q" placeholder="Q. 질문">
@@ -2823,12 +2883,15 @@
                 </div>
 
                 <div class="card" id="block-quote1">
-                    <h2 id="prev-q1-icon" contenteditable="true" data-placeholder="아이콘 (예: 🌌)"></h2>
+                    <div class="psych-head">
+                        <h2 id="prev-q1-icon" contenteditable="true" data-placeholder="아이콘 (예: 🌌)"></h2>
+                        <div class="psych-rel main-text" id="prev-q1-text" contenteditable="true" data-placeholder="🔗 관계성"></div>
+                    </div>
                     <div class="face">
                         <span id="prev-q2-f1" contenteditable="true" data-placeholder="A의 표정"></span>
                         <span id="prev-q2-f2" contenteditable="true" data-placeholder="B의 표정"></span>
                     </div>
-                    <p class="quote" id="prev-q1-text" contenteditable="true" data-placeholder="혼자만의 심리 상태나 독백을 적어보세요."></p>
+                    <div class="quote inner" id="prev-q1-inner" contenteditable="true" data-placeholder="💭 속마음 · 속으로 하는 생각을 적어보세요."></div>
                     <div class="q" id="prev-qa" style="display:none;">
                         <em id="prev-q2-q" contenteditable="true" data-placeholder="Q. 질문을 적어주세요."></em>
                         <span id="prev-q2-a" contenteditable="true" data-placeholder="A. 대답을 적어주세요."></span>
@@ -3074,6 +3137,99 @@
             el.normalize();
         }
 
+        // ==========================================
+        // 🧹 편집 칸 안팎으로 흩어진 줄 정리
+        //  - 예전에 Enter로 생긴 <div>/<p> 줄을 원래 칸 안의 줄바꿈(<br>)으로 되돌림
+        //  - <p> 로 된 편집 칸은 <div> 로 바꿔서 다시는 밖으로 밀려나지 않게 함
+        // ==========================================
+        function insertPlainTextWithBreaks(txt) {
+            const lines = String(txt).replace(/\r\n?/g, '\n').split('\n');
+            lines.forEach((line, i) => {
+                if (i) document.execCommand('insertLineBreak');
+                if (line) document.execCommand('insertText', false, line);
+            });
+        }
+
+        function flattenEditable(el) {
+            let changed = false;
+            [...el.querySelectorAll('div, p')].reverse().forEach(b => {
+                const frag = document.createDocumentFragment();
+                const prev = b.previousSibling;
+                const needBr = prev && !(prev.nodeName === 'BR') && !(prev.nodeType === 3 && !prev.data.trim() && !prev.previousSibling);
+                if (needBr) frag.appendChild(document.createElement('br'));
+                const inner = b.innerHTML === '<br>' ? '' : b.innerHTML;
+                const tmp = document.createElement('span');
+                tmp.innerHTML = inner;
+                while (tmp.firstChild) frag.appendChild(tmp.firstChild);
+                b.replaceWith(frag);
+                changed = true;
+            });
+            // 끝에 남은 쓸데없는 <br> 정리
+            while (el.lastChild && el.lastChild.nodeName === 'BR' && el.childNodes.length > 1) {
+                el.lastChild.remove();
+                changed = true;
+            }
+            return changed;
+        }
+
+        function syncCtrlFromPreview(el) {
+            const cid = el.id ? ctrlIdFor(el.id) : null;
+            const ctrl = cid && document.getElementById(cid);
+            if (ctrl && (ctrl.tagName === 'INPUT' || ctrl.tagName === 'TEXTAREA')) {
+                ctrl.value = el.innerText.replace(/\n+$/, '');
+                if (ctrl.tagName === 'TEXTAREA') ctrl.innerHTML = '';
+                else ctrl.setAttribute('value', ctrl.value);
+            }
+        }
+
+        function repairStrayLines() {
+            const area = document.getElementById('capture-area');
+            if (!area) return false;
+            let changed = false;
+
+            // 1) 편집 칸 바로 뒤에 붙은 이름 없는 줄(<div>/<p>)을 칸 안으로 다시 넣음
+            const touched = new Set();
+            area.querySelectorAll('[contenteditable="true"][id]').forEach(ed => {
+                let n = ed.nextElementSibling;
+                while (n && (n.tagName === 'DIV' || n.tagName === 'P') && !n.id && !n.className && !n.hasAttribute('contenteditable')) {
+                    const next = n.nextElementSibling;
+                    if (n.textContent.trim() || n.querySelector('img')) {
+                        if (ed.textContent.trim()) ed.appendChild(document.createElement('br'));
+                        while (n.firstChild) ed.appendChild(n.firstChild);
+                    }
+                    // 줄 사이의 빈 텍스트도 같이 정리
+                    if (n.previousSibling && n.previousSibling.nodeType === 3 && !n.previousSibling.data.trim()) n.previousSibling.remove();
+                    n.remove();
+                    changed = true;
+                    touched.add(ed);
+                    n = next;
+                }
+            });
+
+            // 2) <p> 편집 칸 → <div> (속성 그대로)
+            area.querySelectorAll('p[contenteditable]').forEach(p => {
+                const d = document.createElement('div');
+                [...p.attributes].forEach(a => d.setAttribute(a.name, a.value));
+                if (p.parentElement && p.parentElement.classList.contains('goal')) d.classList.add('goal-desc');
+                while (p.firstChild) d.appendChild(p.firstChild);
+                p.replaceWith(d);
+                changed = true;
+            });
+
+            // 3) 칸 안에 들어간 <div>/<p> 줄도 <br> 줄바꿈으로 평평하게
+            area.querySelectorAll('[contenteditable="true"][id]').forEach(ed => {
+                if (ed.classList.contains('dev-container')) return;
+                if (flattenEditable(ed)) {
+                    changed = true;
+                    touched.add(ed);
+                }
+            });
+
+            // 고친 칸만 패널 입력칸에도 똑같이 반영
+            touched.forEach(ed => syncCtrlFromPreview(document.getElementById(ed.id) || ed));
+            return changed;
+        }
+
         // 패널 ID ↔ 미리보기 ID 짝 맞추기 (규칙이 다른 블럭들)
         //  - 노트 줄: 미리보기 prev-noteline-N ↔ 패널 ctrl-t-noteline-N
         //  - TMI: 미리보기 block-tmi ↔ 패널 ctrl-tmi
@@ -3101,6 +3257,7 @@
                 e.target.innerHTML = '';
             }
             if (e.target.hasAttribute('contenteditable')) {
+                if (!e.isComposing && e.target.querySelector && e.target.querySelector('div, p') && !e.target.classList.contains('dev-container')) flattenEditable(e.target);
                 const id = e.target.id;
                 const ctrlId = id ? ctrlIdFor(id) : null;
                 if (ctrlId) {
@@ -3216,7 +3373,7 @@
             }
             if (e.target.isContentEditable) {
                 e.preventDefault();
-                document.execCommand('insertText', false, e.clipboardData.getData('text/plain'));
+                insertPlainTextWithBreaks(e.clipboardData.getData('text/plain'));
             }
         });
         document.addEventListener('keydown', e => {
@@ -3235,6 +3392,12 @@
                 e.preventDefault();
                 forceAutoSave();
                 showToast('💾 강제 저장 완료!');
+            }
+            // ↵ 미리보기에서 직접 쓸 때 Enter = 줄바꿈(<br>). 문단이 쪼개져 블럭 밖으로 튀어나가는 것 방지
+            if (e.key === 'Enter' && !e.isComposing && e.keyCode !== 229 && e.target.isContentEditable && !e.target.closest('.dynamic-list:not([data-type="note"])')) {
+                e.preventDefault();
+                document.execCommand('insertLineBreak');
+                return;
             }
             if (e.key === 'Enter') {
                 const listContainer = e.target.closest('.dynamic-list');
@@ -3374,7 +3537,10 @@
                                     <input type="text" id="ctrl-q2-f1" placeholder="A 얼굴 (표정)">
                                     <input type="text" id="ctrl-q2-f2" placeholder="B 얼굴 (표정)">
                                 </div>
-                                <textarea id="ctrl-q1-text" rows="2" placeholder="독백이나 속마음, 인용구"></textarea>
+                                <label class="mini-label">🔗 관계성 (아이콘 옆 작은 글씨)</label>
+                                    <textarea id="ctrl-q1-text" rows="2" placeholder="두 사람의 관계 (예: 증명이 자꾸 고백이 되는 동행자)"></textarea>
+                                    <label class="mini-label">💭 속마음</label>
+                                    <textarea id="ctrl-q1-inner" rows="2" placeholder="속으로 하는 생각, 독백"></textarea>
                                 <label class="qa-toggle"><input type="checkbox" id="ctrl-qa-on" onchange="toggleQA(this.checked)"> 💬 Q&amp;A (질문·대답) 쓰기</label>
                                 <div id="ctrl-qa-fields" style="display:none;">
                                     <input type="text" id="ctrl-q2-q" placeholder="Q. 질문">
@@ -3787,7 +3953,7 @@
             const id = 'custom' + (Date.now() % 100000);
             document.getElementById('capture-area').insertAdjacentHTML('beforeend',
                 `<div class="card" id="block-${id}"><h2 id="prev-${id}-t" contenteditable="true" data-placeholder="📝 제목">📝 메모</h2>
-                 <p class="quote" id="prev-${id}-b" contenteditable="true" data-placeholder="자유롭게 적어보세요."></p></div>`);
+                 <div class="quote" id="prev-${id}-b" contenteditable="true" data-placeholder="자유롭게 적어보세요."></div></div>`);
 
             const extra = `<input type="text" id="ctrl-${id}-t" placeholder="제목" value="📝 메모">
                  <textarea id="ctrl-${id}-b" rows="3" placeholder="내용"></textarea>
@@ -3860,6 +4026,100 @@
                 span.innerText = item.trim();
                 invPrev.appendChild(span);
             });
+            // 비어 있으면 미리보기에서 바로 적을 수 있는 칸을 보여줌 (저장·캡처 때는 자동으로 빠짐)
+            if (!invPrev.children.length) {
+                invPrev.innerHTML = '<span class="inv-item inv-new main-text" id="prev-inv-new" contenteditable="true" data-placeholder="소지품 입력 (쉼표로 구분)"></span>';
+            }
+        }
+
+        // 미리보기의 소지품 입력칸 → 패널과 연결
+        document.addEventListener('input', e => {
+            if (e.target.id !== 'prev-inv-new') return;
+            const ta = document.getElementById('ctrl-inv-items');
+            if (ta) ta.value = e.target.innerText.replace(/\n+$/, '');
+        });
+        document.addEventListener('focusout', e => {
+            if (e.target.id !== 'prev-inv-new') return;
+            renderInventory();
+            forceAutoSave();
+        });
+
+        // 🌌 심리 블럭: 관계성 + 속마음 두 칸 (예전 저장본에는 속마음 칸을 새로 끼워 넣음)
+        function ensurePsychInner() {
+            let changed = false;
+            const t1 = document.getElementById('prev-q1-text');
+            if (t1) {
+                if (!document.getElementById('prev-q1-inner')) {
+                    const blk = document.getElementById('block-quote1');
+                    const anchor = (blk && (blk.querySelector('.face') || blk.querySelector('.psych-head'))) || t1;
+                    anchor.insertAdjacentHTML('afterend', '<div class="quote inner" id="prev-q1-inner" contenteditable="true" data-placeholder="💭 속마음 · 속으로 하는 생각을 적어보세요."></div>');
+                    changed = true;
+                }
+            }
+            const c1 = document.getElementById('ctrl-q1-text');
+            if (c1 && !document.getElementById('ctrl-q1-inner')) {
+                c1.setAttribute('placeholder', '두 사람의 관계 (예: 증명이 자꾸 고백이 되는 동행자)');
+                if (!(c1.previousElementSibling && c1.previousElementSibling.classList.contains('mini-label'))) {
+                    c1.insertAdjacentHTML('beforebegin', '<label class="mini-label">🔗 관계성 (아이콘 옆 작은 글씨)</label>');
+                }
+                c1.insertAdjacentHTML('afterend', '<label class="mini-label">💭 속마음</label><textarea id="ctrl-q1-inner" rows="2" placeholder="속으로 하는 생각, 독백"></textarea>');
+                changed = true;
+            }
+            return changed;
+        }
+
+        // 🌌 심리: 관계성 칸을 아이콘 옆 머리줄로 (예전 저장본의 글상자도 옮김)
+        function ensurePsychHead() {
+            const b = document.getElementById('block-quote1');
+            const h = document.getElementById('prev-q1-icon');
+            const t1 = document.getElementById('prev-q1-text');
+            if (!b || !h || !t1) return false;
+            let changed = false;
+            let head = b.querySelector('.psych-head');
+            if (!head) {
+                head = document.createElement('div');
+                head.className = 'psych-head';
+                h.before(head);
+                changed = true;
+            }
+            if (h.parentElement !== head) {
+                head.prepend(h);
+                changed = true;
+            }
+            if (t1.parentElement !== head) {
+                head.appendChild(t1);
+                changed = true;
+            }
+            if (t1.classList.contains('quote')) {
+                t1.classList.remove('quote');
+                changed = true;
+            }
+            ['psych-rel', 'main-text'].forEach(c => {
+                if (!t1.classList.contains(c)) {
+                    t1.classList.add(c);
+                    changed = true;
+                }
+            });
+            if (t1.getAttribute('data-placeholder') !== '🔗 관계성') {
+                t1.setAttribute('data-placeholder', '🔗 관계성');
+                changed = true;
+            }
+            const c1 = document.getElementById('ctrl-q1-text');
+            const lab = c1 && c1.previousElementSibling;
+            const lt = '🔗 관계성 (아이콘 옆 작은 글씨)';
+            if (lab && lab.classList.contains('mini-label') && lab.textContent !== lt) {
+                lab.textContent = lt;
+                changed = true;
+            }
+            return changed;
+        }
+
+        // 📚 노트: 줄이 하나도 없으면 첫 줄을 넣어 둠
+        function ensureNoteLine() {
+            const list = document.getElementById('list-note');
+            if (!list || list.querySelector('.note-line, .note-desc')) return false;
+            addNoteLine();
+            return true;
         }
 
         function removeRow(id) {
@@ -3900,7 +4160,7 @@
 
         function addPlan(title = "", tag = "단기", desc = "") {
             const id = 'plan-' + Math.floor(Math.random() * 10000);
-            document.getElementById('list-plan').insertAdjacentHTML('beforeend', `<div class="goal" id="prev-${id}"><h3 id="prev-t-${id}" class="main-text" contenteditable="true" data-placeholder="기획 제목">${title}</h3> <span id="prev-tg-${id}" class="tag toggle-tag plan-type plan" contenteditable="true" data-placeholder="기간">${tag}</span><p id="prev-d-${id}" contenteditable="true" data-placeholder="세부 내용이나 이유를 적으세요">${desc}</p></div>`);
+            document.getElementById('list-plan').insertAdjacentHTML('beforeend', `<div class="goal" id="prev-${id}"><h3 id="prev-t-${id}" class="main-text" contenteditable="true" data-placeholder="기획 제목">${title}</h3> <span id="prev-tg-${id}" class="tag toggle-tag plan-type plan" contenteditable="true" data-placeholder="기간">${tag}</span><div id="prev-d-${id}" class="goal-desc" contenteditable="true" data-placeholder="세부 내용이나 이유를 적으세요">${desc}</div></div>`);
             document.getElementById('ctrl-plan-container').insertAdjacentHTML('beforeend', `<div class="row" id="ctrl-${id}" style="margin-bottom:8px;background:#f8fafc;padding:8px;border-radius:8px;flex-direction:column;"><div class="row"><input type="text" id="ctrl-t-${id}" placeholder="기획 제목" style="flex:1" value="${title}"><input type="text" id="ctrl-tg-${id}" placeholder="기간" style="width:90px;" value="${tag}"><button class="color-btn" onclick="toggleTagState('prev-tg-${id}')" title="스위치">🎨</button><button class="del-btn" onclick="removeRow('${id}')">✖</button></div><textarea id="ctrl-d-${id}" rows="2" placeholder="세부 내용">${desc}</textarea></div>`);
             forceAutoSave();
         }
@@ -4481,9 +4741,15 @@
             }
 
             // 구버전 슬롯/백업에는 없는 NPC 대답 블럭을 자동으로 추가
+            const repaired = repairStrayLines();
+            if (repaired) setTimeout(() => showToast('🧹 블럭 밖으로 나가 있던 글을 원래 칸 안으로 되돌렸어요.'), 300);
             const migrated = migrateLegacy();
             const merged = mergePsychBlocks();
-            if (ensureNpcQaBlock() || migrated || merged) forceAutoSave();
+            const psychHead = ensurePsychHead();
+            const psych2 = ensurePsychInner();
+            const noteFix = ensureNoteLine();
+            renderInventory();
+            if (ensureNpcQaBlock() || migrated || merged || repaired || psych2 || noteFix || psychHead) forceAutoSave();
             syncQAUI();
             if (ensureCanonicalOrderOnce()) forceAutoSave();
             renderDdayPanel();
@@ -4629,6 +4895,10 @@
         }
 
         function pruneForExport(root) {
+            root.querySelectorAll('.inv-new').forEach(n => n.remove());
+            root.querySelectorAll('.quote').forEach(q => {
+                if (!q.textContent.trim()) q.remove();
+            });
             root.querySelectorAll('.img-block-wrapper').forEach(w => {
                 const img = w.querySelector('#prev-img');
                 if (!img || !img.getAttribute('src') || img.style.display === 'none') w.remove();
